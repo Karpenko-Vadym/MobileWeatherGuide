@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- teal_button drawable draws a teal button background with a ripple effect when clicked. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorDarkGrey">
+    <item android:drawable="@color/colorTeal"/>
+</ripple>

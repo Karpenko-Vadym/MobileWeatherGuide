@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Mobile Weather Guide</string>
+    <string name="preferences_filename">shared_application_preferences</string>
+    <string name="location_id">location_id</string>
+    <string name="location_display_name">location_display_name</string>
+    <string name="menu_location">Location</string>
+    <string name="menu_notifications">Notifications</string>
+    <string name="url_api_key">&amp;APPID=d9d8bec8ab1806f5096d7734167da78e</string>
+    <string name="current_weather_url">http://api.openweathermap.org/data/2.5/weather?id=</string>
+    <!-- Navigation drawer toggle items -->
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
+    <string name="drawer_main_menu">Main Menu</string>
+    <string name="drawer_icon_description">Drawer Icon</string>
+</resources>

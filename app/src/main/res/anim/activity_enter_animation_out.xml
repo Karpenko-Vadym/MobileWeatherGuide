@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_enter_animation_out animation represents the transition (Slide right) between two activities this (out) animation is used to animate outgoing activity. -->
+<translate
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="@android:integer/config_mediumAnimTime"
+    android:fromXDelta="0%"
+    android:toXDelta="-100%">
+</translate>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RelativeLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingLeft">@dimen/horizontal_spacing</item>
+        <item name="android:paddingRight">@dimen/horizontal_spacing</item>
+        <item name="android:background">@color/colorNightShade</item>
+    </style>
+
+    <style name="RelativeLayout.Teal">
+        <item name="android:background">@color/colorTeal</item>
+    </style>
+
+    <style name="TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextView.Display">
+        <item name="android:textSize">@dimen/font_display</item>
+    </style>
+
+    <style name="TextView.Headline">
+        <item name="android:textSize">@dimen/font_headline</item>
+    </style>
+
+    <style name="TextView.Title">
+        <item name="android:textSize">@dimen/font_title</item>
+    </style>
+
+    <style name="TextView.Subheading">
+        <item name="android:textSize">@dimen/font_subheading</item>
+    </style>
+
+    <style name="TextView.Body">
+        <item name="android:textSize">@dimen/font_body</item>
+    </style>
+
+    <style name="TextView.Caption">
+        <item name="android:textSize">@dimen/font_caption</item>
+    </style>
+
+    <style name="TextView.Display.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="TextView.Headline.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="TextView.Title.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="TextView.Subheading.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="TextView.Body.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="TextView.Caption.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/default_button_height</item>
+        <item name="android:paddingLeft">@dimen/horizontal_spacing</item>
+        <item name="android:paddingRight">@dimen/horizontal_spacing</item>
+        <item name="android:background">@drawable/light_grey_button</item>
+        <item name="android:fontFamily">MONOSPACE</item>
+    </style>
+
+    <style name="Button.DarkGrey">
+        <item name="android:background">@drawable/dark_grey_button</item>
+    </style>
+
+    <style name="Button.Teal">
+        <item name="android:background">@drawable/teal_button</item>
+    </style>
+
+    <style name="Button.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="Button.DarkGrey.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="Button.Teal.HorizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="DrawerLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="DrawerLayout.ListView">
+        <item name="android:background">@color/colorDarkGrey</item>
+        <item name="android:layout_marginRight">@dimen/navigation_right_spacing</item>
+        <item name="android:layout_gravity">start|left</item>
+        <item name="android:choiceMode">singleChoice</item>
+        <item name="android:divider">@color/colorTeal</item>
+        <item name="android:dividerHeight">0.5dp</item>
+
+    </style>
+
+    <style name="RelativeLayout.Drawer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- light_grey_button drawable draws a light grey button background with a ripple effect when clicked. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorDarkTeal">
+    <item android:drawable="@color/colorLightGrey"/>
+</ripple>

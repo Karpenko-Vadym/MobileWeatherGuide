@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_initial"
+    style="@style/RelativeLayout.Teal"
+    tools:context="com.vk.android.mobileweatherguide.InitialActivity">
+
+    <TextView
+        style="@style/TextView.Headline.HorizontalCenter"
+        android:id="@+id/initial_headline"
+        android:layout_marginTop="@dimen/space_between_content_areas"
+        android:text="Welcome to Mobile Weather Guide!" />
+
+    <TextView
+        style="@style/TextView.Subheading.HorizontalCenter"
+        android:id="@+id/initial_subheading"
+        android:layout_below="@id/initial_headline"
+        android:layout_marginTop="@dimen/space_between_content_areas"
+        android:text="Before we begin, please select your location." />
+
+    <AutoCompleteTextView
+        android:id="@+id/citiesAutoCompleteField"
+        android:layout_below="@id/initial_subheading"
+        android:layout_marginTop="@dimen/space_between_content_areas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorDirtyWhite"
+        android:hint="Please start typing here"
+        android:textColorHint="@color/colorLightTeal" />
+
+    <TextView
+        android:id="@+id/initial_subheading_under"
+        style="@style/TextView.Subheading.HorizontalCenter"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/space_between_content_areas"
+        android:layout_below="@id/citiesAutoCompleteField"
+        android:text="Please start typing and then select your city from autocomplete field." />
+    <TextView
+        style="@style/TextView.Subheading.HorizontalCenter"
+        android:layout_alignParentBottom="true"
+        android:text="NOTE: Location can be changed at any time by navigating to \'Location\' screen and updating your location." />
+
+</RelativeLayout>

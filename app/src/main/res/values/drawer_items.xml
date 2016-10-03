@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drawer_current_weather">Current Weather</string>
+    <string-array name="drawer_items">
+        <item>Current Weather</item>
+    </string-array>
+</resources>
