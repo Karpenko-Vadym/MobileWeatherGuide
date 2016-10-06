@@ -1,5 +1,7 @@
 package com.vk.android.mobileweatherguide;
 
+import java.util.Date;
+
 public class WeatherInfo
 {
     private static WeatherInfo weatherInfo;
@@ -42,6 +44,8 @@ public class WeatherInfo
         private System sys;
         private Weather[] weather;
         private Wind wind;
+        private UVI uvIndex;
+        private Date timestamp;
 
         public String getBase()
         {
@@ -173,6 +177,26 @@ public class WeatherInfo
             this.wind = wind;
         }
 
+        public UVI getUvIndex()
+        {
+            return this.uvIndex;
+        }
+
+        public void setUvIndex(UVI uvIndex)
+        {
+            this.uvIndex = uvIndex;
+        }
+
+        public Date getTimestamp()
+        {
+            return this.timestamp;
+        }
+
+        public void setTimestamp(Date timestamp)
+        {
+            this.timestamp = timestamp;
+        }
+
         protected class Clouds
         {
             private String all;          // Cloudiness, %.
@@ -217,7 +241,9 @@ public class WeatherInfo
         protected class Main
         {
             private int humidity;        // Humidity, %.
-            private int pressure;        // Atmospheric pressure (on the sea level, if there is no sea_level or grnd_level data), hPa.
+            private double pressure;     // Atmospheric pressure (on the sea level, if there is no sea_level or grnd_level data), hPa.
+            private double sea_level;    // Atmospheric pressure on the sea level, hPa
+            private double grnd_level;   // Atmospheric pressure on the ground level, hPa
             private double temp;         // Temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
             private double temp_max;     // Maximum temperature at the moment. This is deviation from current temp that is possible for large cities and megalopolises geographically expanded (use these parameter optionally). Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
             private double temp_min;     // Minimum temperature at the moment. This is deviation from current temp that is possible for large cities and megalopolises geographically expanded (use these parameter optionally). Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
@@ -242,9 +268,34 @@ public class WeatherInfo
                 this.humidity = humidity;
             }
 
-            public int getPressure()
+            public double getPressure()
             {
                 return this.pressure;
+            }
+
+            public double getSea_level()
+            {
+                return this.sea_level;
+            }
+
+            public void setSea_level(double sea_level)
+            {
+                this.sea_level = sea_level;
+            }
+
+            public double getGrnd_level()
+            {
+                return this.grnd_level;
+            }
+
+            public void setGrnd_level(double grnd_level)
+            {
+                this.grnd_level = grnd_level;
+            }
+
+            public double getPressureKPA(double pressure)
+            {
+                return pressure * 0.1;
             }
 
             public void setPressure(int pressure)
@@ -468,6 +519,65 @@ public class WeatherInfo
                 this.speed = speed;
             }
         }
+
+        protected class UVI
+        {
+            private double data;        // UV Index value.
+            private Location location;
+
+            public double getData()
+            {
+                return this.data;
+            }
+
+            public void setData(double data)
+            {
+                this.data = data;
+            }
+
+            protected class Location
+            {
+                private double latitude;
+                private double longitude;
+
+                public double getLongitude()
+                {
+                    return this.longitude;
+                }
+
+                public void setLongitude(double longitude)
+                {
+                    this.longitude = longitude;
+                }
+
+                public double getLatitude()
+                {
+                    return this.latitude;
+                }
+
+                public void setLatitude(double latitude)
+                {
+                    this.latitude = latitude;
+                }
+            }
+        }
+    }
+
+    protected double getFahrenheit(double kelvinTemperature)
+    {
+        return kelvinTemperature * 9 / 5 - 459.67;
+    }
+
+    protected double getCelsius(double kelvinTemperature)
+    {
+        return kelvinTemperature - 273.15;
+    }
+
+    protected String getWindDirection(double degree)
+    {
+        String[] directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
+
+        return directions[(int)((degree / 45) % 8)];
     }
 }
 

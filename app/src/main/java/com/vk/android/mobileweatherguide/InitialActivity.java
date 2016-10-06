@@ -12,9 +12,6 @@ import android.content.DialogInterface;
 import java.util.Arrays;
 import android.content.Intent;
 
-// TODO: Remove this import when toast is removed
-import android.widget.Toast;
-
 public class InitialActivity extends AppCompatActivity
 {
     private CityInfo cityInfo;
@@ -97,10 +94,6 @@ public class InitialActivity extends AppCompatActivity
 
                                     // Write location display name to shared preferences.
                                     getApplicationSharedPreferenceManager().setLocationDisplayName(getCityInfo().getCityDisplayNames()[InitialActivity.this.getSelectedLocationIndex()]);
-
-                                    // TODO: Remove toast once testing is complete
-                                    displayToast("Position: " + InitialActivity.this.getSelectedLocationIndex() + "\nLocation id: " + InitialActivity.this.getApplicationSharedPreferenceManager().getLocationId() + "\nLocation Display Name: " + InitialActivity.this.getApplicationSharedPreferenceManager().getLocationDisplayName());
-
 
                                     // Once preferences (Location id and location display name) are set, start main activity.
                                     Intent explicitIntent = new Intent(InitialActivity.this, MainActivity.class);
@@ -200,12 +193,6 @@ public class InitialActivity extends AppCompatActivity
     private void setApplicationSharedPreferenceManager(ApplicationSharedPreferenceManager applicationSharedPreferenceManager)
     {
         this.applicationSharedPreferenceManager = applicationSharedPreferenceManager;
-    }
-
-    // displayToast method displays a toast with a message provided as a parameter. Toast is mostly used for testing purposes.
-    private void displayToast(String message)
-    {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     // startErrorActivity method start ErrorActivity activity.

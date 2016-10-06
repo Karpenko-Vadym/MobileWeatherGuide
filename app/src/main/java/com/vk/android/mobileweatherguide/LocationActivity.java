@@ -47,8 +47,6 @@ public class LocationActivity extends AppCompatActivity
 
         if(this.getApplicationSharedPreferenceManager().validatePreferences()) // Validate that preferences (Location id and location display name) are set.
         {
-            // TODO: Add location preferences logic with setting default value for AutoCompleteTextView
-
             if(this.getCityInfo().validateData()) // Ensure that data from cities.xml string arrays is fetched properly.
             {
                 // Get reference of TextView with the id of location_current_location.
@@ -96,10 +94,6 @@ public class LocationActivity extends AppCompatActivity
 
                                         // Write location display name to shared preferences.
                                         LocationActivity.this.getApplicationSharedPreferenceManager().setLocationDisplayName(getCityInfo().getCityDisplayNames()[LocationActivity.this.getSelectedLocationIndex()]);
-
-                                        // TODO: Remove toast once testing is complete
-                                        displayToast("Position: " + LocationActivity.this.getSelectedLocationIndex() + "\nLocation id: " + LocationActivity.this.getApplicationSharedPreferenceManager().getLocationId() + "\nLocation Display Name: " + LocationActivity.this.getApplicationSharedPreferenceManager().getLocationDisplayName());
-
 
                                         // Once preferences (Location id and location display name) are set, start main activity.
                                         Intent explicitIntent = new Intent(LocationActivity.this, MainActivity.class);

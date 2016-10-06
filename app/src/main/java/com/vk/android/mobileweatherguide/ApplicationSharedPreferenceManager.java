@@ -15,9 +15,6 @@ public class ApplicationSharedPreferenceManager
         this.setActivity(activity);
         // Set shared preferences to access file identified by the resource string R.string.preferences_filename and opens it using private mode so the file is accessible by only your app.
         this.setSharedPreferences(this.getActivity().getSharedPreferences(this.getActivity().getString(R.string.preferences_filename), Activity.MODE_PRIVATE));
-
-        // TODO: Remove this once tested.
-        //this.setSharedPreferencesEditor(getSharedPreferences().edit());
     }
 
     // Setters and getters for ApplicationSharedPreferenceManager properties.

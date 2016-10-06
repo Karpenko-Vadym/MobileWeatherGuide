@@ -5,11 +5,31 @@
     <string name="location_display_name">location_display_name</string>
     <string name="menu_location">Location</string>
     <string name="menu_notifications">Notifications</string>
-    <string name="url_api_key">&amp;APPID=d9d8bec8ab1806f5096d7734167da78e</string>
+    <string name="url_api_key">appid=d9d8bec8ab1806f5096d7734167da78e</string>
     <string name="current_weather_url">http://api.openweathermap.org/data/2.5/weather?id=</string>
+    <string name="current_uvindex_url">http://api.openweathermap.org/v3/uvi/</string>
+
     <!-- Navigation drawer toggle items -->
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="drawer_main_menu">Main Menu</string>
     <string name="drawer_icon_description">Drawer Icon</string>
+
+    <!-- UV Index levels -->
+    <string name="uvindex_level_low">Low</string>
+    <string name="uvindex_level_moderate">Moderate</string>
+    <string name="uvindex_level_high">High</string>
+    <string name="uvindex_level_very_high">Very High</string>
+    <string name="uvindex_level_extreme">Extreme</string>
+
+    <!-- Weather conditions -->
+    <string name="cloudiness_clear_sky">Sky is clear</string>
+
+    <!-- Icon descriptions -->
+    <string name="icon_humidity">Humidity Icon</string>
+    <string name="icon_current_weather">Current Weather Icon</string>
+    <string name="icon_uvindex">UV Index Icon</string>
+    <string name="icon_wind">Wind Icon</string>
+
+
 </resources>

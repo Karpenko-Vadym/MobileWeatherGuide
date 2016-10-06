@@ -41,7 +41,8 @@ public class ApplicationDrawerNavigationManager
         ArrayList<String> drawerItems = new ArrayList<String>(Arrays.asList(this.getCurrentActivity().getResources().getStringArray(R.array.drawer_items)));
 
         // Remove drawer item from ListView for the current activity (In other words, do not display current activity in the menu).
-        if (this.getCurrentActivity() instanceof MainActivity) {
+        if (this.getCurrentActivity() instanceof MainActivity)
+        {
             drawerItems.remove(this.getCurrentActivity().getResources().getString(R.string.drawer_current_weather));
         }
 
@@ -101,15 +102,9 @@ public class ApplicationDrawerNavigationManager
             }
         });
 
-        // TODO: Remove this after testing is complete.
-        //this.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true); // Enable drawer indicator.
-
         this.getDrawerLayout().addDrawerListener(this.getActionBarDrawerToggle()); // Add ActionBarDrawerToggle to the list of listeners.
 
         this.getActionBar().setDisplayHomeAsUpEnabled(true); // Enable left-facing caret on the left side of activity bar and when pressed, activity receives a call to onOptionsItemSelected().
-
-        // TODO: Remove this after testing is complete.
-        //this.getActionBar().setHomeButtonEnabled(true); // Enable home button in the left corner of action bar.
     }
 
 

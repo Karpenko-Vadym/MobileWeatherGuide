@@ -38,6 +38,7 @@
     <TextView
         style="@style/TextView.Subheading.HorizontalCenter"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/space_between_content_areas"
         android:text="NOTE: Location can be changed at any time by navigating to \'Location\' screen and updating your location." />
 
 </RelativeLayout>
