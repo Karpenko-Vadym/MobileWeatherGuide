@@ -69,7 +69,16 @@ public class MainActivity extends AppCompatActivity
             this.setApplicationSharedPreferenceManager(new ApplicationSharedPreferenceManager(this));
         }
 
-        if(WeatherInfo.getInstance().getCurrentWeather() == null || WeatherInfo.getInstance().getCurrentWeather().getUvIndex() == null)
+        if(WeatherInfo.getInstance().getCurrentWeather() == null || WeatherInfo.getInstance().getCurrentWeather().getUvIndex() == null || WeatherInfo.getInstance().getHourlyForecast() == null || WeatherInfo.getInstance().getHourlyForecast().getList() == null || WeatherInfo.getInstance().getHourlyForecast().getList().length <= 4)
+        {
+            // If any of required information is missing, send a request to fetch required information.
+            String url = this.getString(R.string.current_weather_url) + this.getApplicationSharedPreferenceManager().getLocationId() + "&" + this.getString(R.string.url_api_key);
+
+            JsonObjectRequest jsonCurrentWeatherRequest = new JsonObjectRequest(Request.Method.GET, url, null, this.getResponseListener(), this.getErrorListener());
+
+            RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonCurrentWeatherRequest);
+        }
+        else if(WeatherInfo.getInstance().getCurrentWeather() != null && !this.getApplicationSharedPreferenceManager().getLocationId().equals(WeatherInfo.getInstance().getCurrentWeather().getId()))
         {
             // If any of required information is missing, send a request to fetch required information.
             String url = this.getString(R.string.current_weather_url) + this.getApplicationSharedPreferenceManager().getLocationId() + "&" + this.getString(R.string.url_api_key);
@@ -256,6 +265,17 @@ public class MainActivity extends AppCompatActivity
 
                     // TODO: Add forecast api call here. URI: http://api.openweathermap.org/data/2.5/forecast/daily?id=6167865&appid=d9d8bec8ab1806f5096d7734167da78e
 
+                    // Send a request to fetch hourly data.
+                    String url = MainActivity.this.getString(R.string.hourly_weather_url) + MainActivity.this.getApplicationSharedPreferenceManager().getLocationId() + "&" + MainActivity.this.getString(R.string.url_api_key);
+
+                    JsonObjectRequest jsonCurrentHourlyWeatherRequest = new JsonObjectRequest(Request.Method.GET, url, null, MainActivity.this.getResponseListener(), MainActivity.this.getErrorListener());
+
+                    RequestQueueSingleton.getInstance(MainActivity.this.getApplicationContext()).addToRequestQueue(jsonCurrentHourlyWeatherRequest);
+                }
+                else if(result.get("list") != null)
+                {
+                    weather.setHourlyForecast(gson.fromJson(jsonObject.toString(), WeatherInfo.HourlyForecast.class)); // Deserialize JSON representation into Weather.HourlyWeather class.
+
                     MainActivity.this.populateContent();
                 }
                 else
@@ -289,27 +309,15 @@ public class MainActivity extends AppCompatActivity
             // Validate value for each field and set each field.
 
             // Set current location.
-            if (this.getApplicationSharedPreferenceManager().getLocationDisplayName() != null)
+            if (WeatherInfo.getInstance().getCurrentWeather().getName() != null  && WeatherInfo.getInstance().getCurrentWeather().getSys() != null && WeatherInfo.getInstance().getCurrentWeather().getSys().getCountry() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_current_location)).setText(this.getApplicationSharedPreferenceManager().getLocationDisplayName());
+                ((TextView) this.findViewById(R.id.current_weather_current_location)).setText(String.format(Locale.CANADA, "%s, %s",WeatherInfo.getInstance().getCurrentWeather().getName(), WeatherInfo.getInstance().getCurrentWeather().getSys().getCountry()));
             }
 
             // Set current temperature value.
-            if (WeatherInfo.getInstance().getCurrentWeather().getMain() != null && WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp() > 0)
+            if (WeatherInfo.getInstance().getCurrentWeather().getMain() != null)
             {
                 ((TextView) this.findViewById(R.id.current_weather_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp())), (char) 0x00B0));
-            }
-
-            // Set high temperature value.
-            if(WeatherInfo.getInstance().getCurrentWeather().getMain() != null && WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp_max() > 0)
-            {
-                ((TextView) this.findViewById(R.id.current_weather_high_temperature)).setText(String.format(Locale.CANADA, "HI: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp_max())), (char) 0x00B0));
-            }
-
-            // Set low temperature value.
-            if(WeatherInfo.getInstance().getCurrentWeather().getMain() != null && WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp_min() > 0)
-            {
-                ((TextView) this.findViewById(R.id.current_weather_low_temperature)).setText(String.format(Locale.CANADA, "LO: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp_min())), (char) 0x00B0));
             }
 
             // Set date and time of the weather update result.
@@ -323,6 +331,13 @@ public class MainActivity extends AppCompatActivity
             {
                 ((TextView) this.findViewById(R.id.current_weather_description)).setText(WeatherInfo.getInstance().getCurrentWeather().getWeather()[0].getDescription().toUpperCase());
             }
+
+            // Set weather icon.
+            if(WeatherInfo.getInstance().getCurrentWeather().getWeather().length > 0 && WeatherInfo.getInstance().getCurrentWeather().getWeather()[0].getIcon() != null)
+            {
+                (this.findViewById(R.id.current_weather_weather_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getCurrentWeather().getWeather()[0].getIcon()));
+            }
+
 
             // Set UV Index value.
             if(WeatherInfo.getInstance().getCurrentWeather().getUvIndex() != null)
@@ -391,10 +406,174 @@ public class MainActivity extends AppCompatActivity
                     ((TextView) this.findViewById(R.id.current_weather_cloudiness)).setText(String.format(Locale.CANADA, "Cloudiness: %s%%", WeatherInfo.getInstance().getCurrentWeather().getClouds().getAll()));
                 }
             }
+
+            // Set hourly forecasting properties.
+            if(WeatherInfo.getInstance().getHourlyForecast().getList() != null && WeatherInfo.getInstance().getHourlyForecast().getList().length >= 4)
+            {
+                // Set in three hours icon property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather().length >= 1 && WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather()[0].getIcon() != null)
+                {
+                    (this.findViewById(R.id.hourly_forecast_three_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather()[0].getIcon()));
+                }
+
+                // Set in three hours temperature property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getMain() != null)
+                {
+                    ((TextView) this.findViewById(R.id.hourly_forecast_three_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getMain().getTemp())), (char) 0x00B0));
+                }
+
+                // Set in three hours time property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getDt() != null)
+                {
+                    ((TextView) this.findViewById(R.id.hourly_forecast_three_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getDt()) * 1000)));
+                }
+
+                // Set in six hours icon property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather().length >= 1 && WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather()[0].getIcon() != null)
+                {
+                    (this.findViewById(R.id.hourly_forecast_six_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather()[0].getIcon()));
+                }
+
+                // Set in six hours temperature property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getMain() != null)
+                {
+                    ((TextView) this.findViewById(R.id.hourly_forecast_six_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getMain().getTemp())), (char) 0x00B0));
+                }
+
+                // Set in six hours time property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getDt() != null)
+                {
+                    ((TextView) this.findViewById(R.id.hourly_forecast_six_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getDt()) * 1000)));
+                }
+
+                // Set in nine hours icon property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather().length >= 1 && WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather()[0].getIcon() != null)
+                {
+                    (this.findViewById(R.id.hourly_forecast_nine_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather()[0].getIcon()));
+                }
+
+                // Set in nine hours temperature property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getMain() != null)
+                {
+                    ((TextView) this.findViewById(R.id.hourly_forecast_nine_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getMain().getTemp())), (char) 0x00B0));
+                }
+
+                // Set in nine hours time property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getDt() != null)
+                {
+                    ((TextView) this.findViewById(R.id.hourly_forecast_nine_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getDt()) * 1000)));
+                }
+
+                // Set in twelve hours icon property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather().length >= 1 && WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather()[0].getIcon() != null)
+                {
+                    (this.findViewById(R.id.hourly_forecast_twelve_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather()[0].getIcon()));
+                }
+
+                // Set in twelve hours temperature property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getMain() != null)
+                {
+                    ((TextView) this.findViewById(R.id.hourly_forecast_twelve_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getMain().getTemp())), (char) 0x00B0));
+                }
+
+                // Set in twelve hours time property.
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getDt() != null)
+                {
+                    ((TextView) this.findViewById(R.id.hourly_forecast_twelve_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getDt()) * 1000)));
+                }
+
+            }
         }
         else
         {
             this.startErrorActivity();
         }
+    }
+
+    // getIconResource method accepts an id of the icon specified by OpenWeatherMap api and translates is to the resource id of the corresponding icon.
+    private int getIconResource(String icon)
+    {
+        int iconId;
+
+        switch(icon)
+        {
+            case "01d":
+                iconId = R.drawable.sunny_day;
+
+                break;
+            case "01n":
+                iconId = R.drawable.clear_night;
+
+                break;
+            case "02d":
+                iconId = R.drawable.few_clouds_day;
+
+                break;
+            case "02n":
+                iconId = R.drawable.few_clouds_night;
+
+                break;
+            case "03d":
+                iconId = R.drawable.scattered_clouds_day;
+
+                break;
+            case "03n":
+                iconId = R.drawable.scattered_clouds_night;
+
+                break;
+            case "04d":
+                iconId = R.drawable.broken_cloud_day;
+
+                break;
+            case "04n":
+                iconId = R.drawable.broken_cloud_night;
+
+                break;
+            case "09d":
+                iconId = R.drawable.shower_rain_day;
+
+                break;
+            case "09n":
+                iconId = R.drawable.shower_rain_night;
+
+                break;
+            case "10d":
+                iconId = R.drawable.rain_day;
+
+                break;
+            case "10n":
+                iconId = R.drawable.rain_night;
+
+                break;
+            case "11d":
+                iconId = R.drawable.thurderstorm_day;
+
+                break;
+            case "11n":
+                iconId = R.drawable.thurderstorm_night;
+
+                break;
+            case "13d":
+                iconId = R.drawable.snow_day;
+
+                break;
+            case "13n":
+                iconId = R.drawable.snow_night;
+
+                break;
+            case "50d":
+                iconId = R.drawable.mist_day;
+
+                break;
+            case "50n":
+                iconId = R.drawable.mist_night;
+
+                break;
+
+            default:
+                iconId = 0;
+        }
+
+        return iconId;
     }
 }
