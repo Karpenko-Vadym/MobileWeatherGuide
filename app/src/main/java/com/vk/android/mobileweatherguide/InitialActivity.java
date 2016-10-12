@@ -17,6 +17,7 @@ public class InitialActivity extends AppCompatActivity
     private CityInfo cityInfo;
     private int selectedLocationIndex = -1;
     private ApplicationSharedPreferenceManager applicationSharedPreferenceManager;
+    private boolean isExitConfirmed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,6 +87,8 @@ public class InitialActivity extends AppCompatActivity
                                     // When user clicks on positive button, store selected city in shared preferences and start main activity.
                                     if(InitialActivity.this.getSelectedLocationIndex() == -1)
                                     {
+                                        // TODO: Decide on displaying the error message in ErrorActivity activity.
+
                                         InitialActivity.this.startErrorActivity();
                                     }
 
@@ -125,6 +128,8 @@ public class InitialActivity extends AppCompatActivity
         }
         else // If data from cities.xml string arrays is NOT fetched properly, display an error.
         {
+            // TODO: Decide on displaying the error message in ErrorActivity activity.
+
             this.startErrorActivity();
         }
     }
@@ -158,10 +163,32 @@ public class InitialActivity extends AppCompatActivity
     @Override
     public void onBackPressed() // This listener listens for navigation bar back button.
     {
-        super.onBackPressed();
+        // When user presses the back button on their device, display confirmation dialog. Once user confirms that he/she wants to exit, exit the application.
+        if(!this.isExitConfirmed())
+        {
+            // Setup AlertDialog and show it.
+            new AlertDialog.Builder(InitialActivity.this).setMessage("Are you sure you want to exit the application?")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            InitialActivity.this.setExitConfirmed(true);
 
-        // Apply exit animation.
-        this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
+                            InitialActivity.this.onBackPressed(); // Invoke onBackPressed() again to exit the application.
+                        }
+                    })
+                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id) { }
+                    }).create().show();
+        }
+        else
+        {
+            super.onBackPressed();
+
+            // Apply exit animation.
+            this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
+        }
     }
 
     // Getters and setters for each property of InitialActivity class.
@@ -195,9 +222,21 @@ public class InitialActivity extends AppCompatActivity
         this.applicationSharedPreferenceManager = applicationSharedPreferenceManager;
     }
 
+    public boolean isExitConfirmed()
+    {
+        return this.isExitConfirmed;
+    }
+
+    public void setExitConfirmed(boolean isExitConfirmed)
+    {
+        this.isExitConfirmed = isExitConfirmed;
+    }
+
     // startErrorActivity method start ErrorActivity activity.
     private void startErrorActivity()
     {
+        // TODO: Decide on displaying the error message in ErrorActivity activity.
+
         Intent explicitIntent = new Intent(this, ErrorActivity.class);
 
         this.startActivity(explicitIntent);

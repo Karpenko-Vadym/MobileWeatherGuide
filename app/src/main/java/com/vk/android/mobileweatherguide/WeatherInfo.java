@@ -8,6 +8,7 @@ public class WeatherInfo
     private static WeatherInfo weatherInfo;
     private CurrentWeather currentWeather;
     private HourlyForecast hourlyForecast;
+    private WeatherForecast weatherForecast;
 
     private WeatherInfo() { }
 
@@ -293,11 +294,6 @@ public class WeatherInfo
             public void setGrnd_level(double grnd_level)
             {
                 this.grnd_level = grnd_level;
-            }
-
-            public double getPressureKPA(double pressure)
-            {
-                return pressure * 0.1;
             }
 
             public void setPressure(int pressure)
@@ -1040,7 +1036,7 @@ public class WeatherInfo
             protected class Rain
             {
                 private double last3h;       // Rain volume for the last 3 hours.
-                private double last1h;       // Rain volume for the last 3 hours.
+                private double last1h;       // Rain volume for the last 1 hours.
 
                 public double getLast3h()
                 {
@@ -1066,7 +1062,7 @@ public class WeatherInfo
             protected class Snow
             {
                 private double last3h;       // Snow volume for the last 3 hours.
-                private double last1h;       // Snow volume for the last 3 hours.
+                private double last1h;       // Snow volume for the last 1 hour.
 
                 public double getLast3h()
                 {
@@ -1091,6 +1087,403 @@ public class WeatherInfo
         }
     }
 
+    public WeatherForecast getWeatherForecast()
+    {
+        return this.weatherForecast;
+    }
+
+    public void setWeatherForecast(WeatherForecast weatherForecast)
+    {
+        this.weatherForecast = weatherForecast;
+    }
+
+    protected class WeatherForecast
+    {
+        private int cnt;
+        private String cod;
+        private String message;
+        private City city;
+        private DailyForecast[] list;
+        private Date timestamp;
+
+        public int getCnt()
+        {
+            return this.cnt;
+        }
+
+        public void setCnt(int cnt)
+        {
+            this.cnt = cnt;
+        }
+
+        public String getCod()
+        {
+            return this.cod;
+        }
+
+        public void setCod(String cod)
+        {
+            this.cod = cod;
+        }
+
+        public String getMessage()
+        {
+            return this.message;
+        }
+
+        public void setMessage(String message)
+        {
+            this.message = message;
+        }
+
+        public City getCity()
+        {
+            return this.city;
+        }
+
+        public void setCity(City city)
+        {
+            this.city = city;
+        }
+
+        public DailyForecast[] getList()
+        {
+            return this.list;
+        }
+
+        public void setList(DailyForecast[] list)
+        {
+            this.list = list;
+        }
+
+        public Date getTimestamp()
+        {
+            return this.timestamp;
+        }
+
+        public void setTimestamp(Date timestamp)
+        {
+            this.timestamp = timestamp;
+        }
+
+        protected class City
+        {
+            private Coordinates coord;
+            private String country;                 // Country code (GB, JP etc.).
+            private String id;                      // City ID.
+            private String name;                    // City name.
+            private String population;
+
+            public Coordinates getCoord()
+            {
+                return this.coord;
+            }
+
+            public void setCoord(Coordinates coord)
+            {
+                this.coord = coord;
+            }
+
+            public String getCounrty()
+            {
+                return this.country;
+            }
+
+            public void setCounrty(String country)
+            {
+                this.country = country;
+            }
+
+            public String getId()
+            {
+                return this.id;
+            }
+
+            public void setId(String id)
+            {
+                this.id = id;
+            }
+
+            public String getName()
+            {
+                return this.name;
+            }
+
+            public void setName(String name)
+            {
+                this.name = name;
+            }
+
+            public String getPopulation()
+            {
+                return this.population;
+            }
+
+            public void setPopulation(String population)
+            {
+                this.population = population;
+            }
+
+            protected class Coordinates
+            {
+                private double lat;                 // City geo location, latitude.
+                private double lon;                 // City geo location, longitude.
+
+                public double getLat()
+                {
+                    return this.lat;
+                }
+
+                public void setLat(double lat)
+                {
+                    this.lat = lat;
+                }
+
+                public double getLon()
+                {
+                    return this.lon;
+                }
+
+                public void setLon(double lon)
+                {
+                    this.lon = lon;
+                }
+            }
+        }
+
+        protected class DailyForecast
+        {
+            private int humidity;        // Humidity, %.
+            private double deg;          // Wind direction, degrees (meteorological).
+            private double speed;        // Wind speed. Unit Default: meter/sec, Metric: meter/sec, Imperial: miles/hour.
+            private double pressure;     // Atmospheric pressure (on the sea level, if there is no sea_level or grnd_level data), hPa.
+            private double snow;         // Snow amount.
+            private double rain;         // Rain amount.
+            private String dt;           // Time of data forecasted, unix, UTC.
+            private String clouds;       // Cloudiness %.
+            private Weather[] weather;
+            private Temperature temp;
+
+            public int getHumidity()
+            {
+                return this.humidity;
+            }
+
+            public void setHumidity(int humidity)
+            {
+                this.humidity = humidity;
+            }
+
+            public double getDeg()
+            {
+                return this.deg;
+            }
+
+            public void setDeg(double deg)
+            {
+                this.deg = deg;
+            }
+
+            public double getSpeed()
+            {
+                return this.speed;
+            }
+
+            public void setSpeed(double speed)
+            {
+                this.speed = speed;
+            }
+
+            public double getPressure()
+            {
+                return this.pressure;
+            }
+
+            public void setPressure(double pressure)
+            {
+                this.pressure = pressure;
+            }
+
+            public double getSnow()
+            {
+                return this.snow;
+            }
+
+            public void setSnow(double snow)
+            {
+                this.snow = snow;
+            }
+
+            public double getRain()
+            {
+                return this.rain;
+            }
+
+            public void setRain(double rain)
+            {
+                this.rain = rain;
+            }
+
+            public String getDt()
+            {
+                return this.dt;
+            }
+
+            public void setDt(String dt)
+            {
+                this.dt = dt;
+            }
+
+            public String getClouds()
+            {
+                return this.clouds;
+            }
+
+            public void setClouds(String clouds)
+            {
+                this.clouds = clouds;
+            }
+
+            public Weather[] getWeather()
+            {
+                return this.weather;
+            }
+
+            public void setWeather(Weather[] weather)
+            {
+                this.weather = weather;
+            }
+
+            public Temperature getTemp()
+            {
+                return this.temp;
+            }
+
+            public void setTemp(Temperature temp)
+            {
+                this.temp = temp;
+            }
+
+            protected class Weather
+            {
+                private String description;  // Weather condition within the group.
+                private String icon;         // Weather icon id.
+                private String id;           // Weather condition id.
+                private String main;         // Group of weather parameters (Rain, Snow, Extreme etc.).
+
+                public String getDescription()
+                {
+                    return this.description;
+                }
+
+                public void setDescription(String description)
+                {
+                    this.description = description;
+                }
+
+                public String getIcon()
+                {
+                    return this.icon;
+                }
+
+                public void setIcon(String icon)
+                {
+                    this.icon = icon;
+                }
+
+                public String getId()
+                {
+                    return this.id;
+                }
+
+                public void setId(String id)
+                {
+                    this.id = id;
+                }
+
+                public String getMain()
+                {
+                    return this.main;
+                }
+
+                public void setMain(String main)
+                {
+                    this.main = main;
+                }
+            }
+        }
+
+        protected class Temperature
+        {
+            private double day;         // Day temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+            private double eve;         // Evening temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+            private double max;         // Max daily temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+            private double min;         // Min daily temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+            private double morn;        // Morning temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+            private double night;       // Night temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+
+            public double getDay()
+            {
+                return this.day;
+            }
+
+            public void setDay(double day)
+            {
+                this.day = day;
+            }
+
+            public double getEve()
+            {
+                return this.eve;
+            }
+
+            public void setEve(double eve)
+            {
+                this.eve = eve;
+            }
+
+            public double getMax()
+            {
+                return this.max;
+            }
+
+            public void setMax(double max)
+            {
+                this.max = max;
+            }
+
+            public double getMin()
+            {
+                return this.min;
+            }
+
+            public void setMin(double min)
+            {
+                this.min = min;
+            }
+
+            public double getMorn()
+            {
+                return this.morn;
+            }
+
+            public void setMorn(double morn)
+            {
+                this.morn = morn;
+            }
+
+            public double getNight()
+            {
+                return this.night;
+            }
+
+            public void setNight(double night)
+            {
+                this.night = night;
+            }
+        }
+    }
+
     // Convert temperature from kelvin to Fahrenheit.
     protected double getFahrenheit(double kelvinTemperature)
     {
@@ -1109,6 +1502,11 @@ public class WeatherInfo
         String[] directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
 
         return directions[(int)((degree / 45) % 8)];
+    }
+
+    public double getPressureKPA(double pressure)
+    {
+        return pressure * 0.1;
     }
 }
 

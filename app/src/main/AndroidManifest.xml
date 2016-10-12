@@ -20,7 +20,8 @@
         <activity android:name=".LocationActivity" />
         <activity android:name=".ErrorActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".NotificationActivity" />
+        <activity android:name=".WeatherForecastActivity" />
     </application>
 
 </manifest>

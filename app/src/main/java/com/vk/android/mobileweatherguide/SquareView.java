@@ -27,6 +27,7 @@ public class SquareView extends View
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    // Measure the view and its content to determine the measured width and the measured height.
     @Override
     public void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     {

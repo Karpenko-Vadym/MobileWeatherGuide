@@ -8,8 +8,16 @@
     <string name="url_api_key">appid=d9d8bec8ab1806f5096d7734167da78e</string>
     <string name="current_weather_url">http://api.openweathermap.org/data/2.5/weather?id=</string>
     <string name="current_uvindex_url">http://api.openweathermap.org/v3/uvi/</string>
-    <string name="hourly_weather_url">http://api.openweathermap.org/data/2.5/forecast?cnt=4&amp;id=</string>
-    <string name="next_12_hours">NEXT 12 HOURS</string>
+    <string name="hourly_weather_url">http://api.openweathermap.org/data/2.5/forecast?id=</string>
+    <string name="hourly_weather_count_url">4</string>
+    <string name="weather_forecast_url">http://api.openweathermap.org/data/2.5/forecast/daily?cnt=</string>
+    <string name="weather_forecast_count_url">14</string>
+    <string name="current_weather_next_12_hours">NEXT 12 HOURS</string>
+    <string name="weather_forecast_temperature">TEMPERATURE</string>
+    <string name="weather_forecast_slide_right">&gt;</string>
+    <string name="weather_forecast_slide_left">&lt;</string>
+    <string name="weather_forecast_navigation_info">Swipe screen or use buttons to navigate between screens</string>
+    <string name="data_not_available">DATA IS NOT AVAILABLE</string>
 
     <!-- Navigation drawer toggle items -->
     <string name="drawer_open">Open drawer</string>
@@ -30,10 +38,9 @@
     <!-- Icon descriptions -->
     <string name="icon_humidity">Humidity Icon</string>
     <string name="icon_current_weather">Current Weather Icon</string>
+    <string name="icon_weather_forecast">Weather Forecast Icon</string>
     <string name="icon_uvindex">UV Index Icon</string>
     <string name="icon_wind">Wind Icon</string>
     <string name="hourly_forecast_three_icon">Hourly Forecast Next 3 Hours Icon</string>
-
-
 
 </resources>

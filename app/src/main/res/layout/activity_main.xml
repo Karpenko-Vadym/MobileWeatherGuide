@@ -39,10 +39,9 @@
             android:text="" />
 
         <TextView
-            style="@style/TextView"
+            android:layout_height="wrap_content"
             android:id="@+id/current_weather_description"
             android:layout_width="match_parent"
-            android:layout_alignParentEnd="true"
             android:textColor="@color/colorClearWhite"
             android:textSize="@dimen/font_subheading"
             android:textAlignment="center"
@@ -75,7 +74,6 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="@dimen/small_gap_between_content_areas"
             android:layout_marginEnd="@dimen/space_between_content_areas"
-            android:background="@drawable/uv_index"
             android:layout_below="@id/current_weather_description" />
 
         <TextView
@@ -106,7 +104,6 @@
             android:layout_toStartOf="@id/current_weather_humidity"
             android:layout_marginTop="@dimen/small_gap_between_content_areas"
             android:layout_marginEnd="@dimen/space_between_content_areas"
-            android:background="@drawable/humidity_index"
             android:layout_below="@id/current_weather_description" />
 
         <TextView
@@ -126,7 +123,6 @@
             android:layout_toStartOf="@id/current_weather_wind"
             android:layout_marginTop="@dimen/small_gap_between_content_areas"
             android:layout_marginEnd="@dimen/space_between_content_areas"
-            android:background="@drawable/wind_index"
             android:layout_below="@id/current_weather_description" />
 
         <TextView
@@ -167,27 +163,26 @@
 
         <TextView
             style="@style/TextView"
-            android:id="@+id/hourly_forecast_three_title"
+            android:id="@+id/hourly_forecast_title"
             android:textSize="@dimen/font_title"
             android:textColor="@color/colorDirtyWhite"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/space_between_content_areas"
             android:layout_below="@id/current_weather_cloudiness"
-            android:text="@string/next_12_hours" />
+            android:text="" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:baselineAligned="true"
-            android:layout_below="@id/hourly_forecast_three_title"
+            android:layout_below="@id/hourly_forecast_title"
             android:layout_marginTop="@dimen/space_between_content_areas">
 
             <RelativeLayout
                 android:layout_weight="1"
+                android:id="@+id/hourly_forecast_three_layout"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
-                android:background="@color/colorDarkGrey"
                 android:layout_marginEnd="@dimen/half_space_between_content_areas">
 
                 <com.vk.android.mobileweatherguide.SquareView
@@ -218,9 +213,9 @@
 
             <RelativeLayout
                 android:layout_weight="1"
+                android:id="@+id/hourly_forecast_six_layout"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
-                android:background="@color/colorDarkGrey"
                 android:layout_marginStart="@dimen/half_space_between_content_areas"
                 android:layout_marginEnd="@dimen/half_space_between_content_areas">
 
@@ -252,9 +247,9 @@
 
             <RelativeLayout
                 android:layout_weight="1"
+                android:id="@+id/hourly_forecast_nine_layout"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
-                android:background="@color/colorDarkGrey"
                 android:layout_marginStart="@dimen/half_space_between_content_areas"
                 android:layout_marginEnd="@dimen/half_space_between_content_areas">
 
@@ -286,9 +281,9 @@
 
             <RelativeLayout
                 android:layout_weight="1"
+                android:id="@+id/hourly_forecast_twelve_layout"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
-                android:background="@color/colorDarkGrey"
                 android:layout_marginStart="@dimen/half_space_between_content_areas"
                 android:layout_marginEnd="@dimen/half_space_between_content_areas">
 

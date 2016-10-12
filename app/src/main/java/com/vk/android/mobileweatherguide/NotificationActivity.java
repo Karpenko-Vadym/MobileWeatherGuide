@@ -1,5 +1,7 @@
 package com.vk.android.mobileweatherguide;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ public class NotificationActivity extends AppCompatActivity
 {
     private ApplicationDrawerNavigationManager applicationDrawerNavigationManager;
     private ApplicationSharedPreferenceManager applicationSharedPreferenceManager;
+    private boolean isExitConfirmed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,10 +75,32 @@ public class NotificationActivity extends AppCompatActivity
     @Override
     public void onBackPressed() // This listener listens for navigation bar back button.
     {
-        super.onBackPressed();
+        // When user presses the back button on their device, display confirmation dialog. Once user confirms that he/she wants to exit, exit the application.
+        if(!this.isExitConfirmed())
+        {
+            // Setup AlertDialog and show it.
+            new AlertDialog.Builder(NotificationActivity.this).setMessage("Are you sure you want to exit the application?")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            NotificationActivity.this.setExitConfirmed(true);
 
-        // Apply exit animation.
-        this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
+                            NotificationActivity.this.onBackPressed(); // Invoke onBackPressed() again to exit the application.
+                        }
+                    })
+                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id) { }
+                    }).create().show();
+        }
+        else
+        {
+            super.onBackPressed();
+
+            // Apply exit animation.
+            this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
+        }
     }
 
     private ApplicationSharedPreferenceManager getApplicationSharedPreferenceManager()
@@ -86,6 +111,16 @@ public class NotificationActivity extends AppCompatActivity
     private void setApplicationSharedPreferenceManager(ApplicationSharedPreferenceManager applicationSharedPreferenceManager)
     {
         this.applicationSharedPreferenceManager = applicationSharedPreferenceManager;
+    }
+
+    public boolean isExitConfirmed()
+    {
+        return this.isExitConfirmed;
+    }
+
+    public void setExitConfirmed(boolean isExitConfirmed)
+    {
+        this.isExitConfirmed = isExitConfirmed;
     }
 
     /*********************************** NAVIGATION METHODS ***********************************/
@@ -121,10 +156,12 @@ public class NotificationActivity extends AppCompatActivity
 
                 this.startActivity(explicitIntent);
 
+                this.finish();
+
                 return true;
 
             default:
-                // When action bar hamburger menu item is selected (Left side), pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event
+                // When action bar hamburger menu item is selected (Left side), pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event.
                 return (this.getApplicationDrawerNavigationManager().getActionBarDrawerToggle().onOptionsItemSelected(item) && super.onOptionsItemSelected(item));
         }
 

@@ -2,5 +2,5 @@
 <!-- dark_grey_button drawable draws a dark grey button background with a ripple effect when clicked. -->
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="@color/colorLightTeal">
-    <item android:drawable="@color/colorDarkGrey"/>
+    <item android:drawable="@drawable/dark_grey_rectangle_rounded_corners"/>
 </ripple>

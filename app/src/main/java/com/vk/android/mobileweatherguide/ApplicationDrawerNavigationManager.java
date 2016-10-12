@@ -45,8 +45,14 @@ public class ApplicationDrawerNavigationManager
         {
             drawerItems.remove(this.getCurrentActivity().getResources().getString(R.string.drawer_current_weather));
         }
+        else if (this.getCurrentActivity() instanceof WeatherForecastActivity)
+        {
+            drawerItems.remove(this.getCurrentActivity().getResources().getString(R.string.drawer_weather_forecast));
+        }
 
         // TODO: Include remaining activities ^
+
+
 
 
         this.getDrawerListView().setAdapter(new ArrayAdapter<>(this.getCurrentActivity(), R.layout.support_simple_spinner_dropdown_item, drawerItems)); // Set adapter for drawer list view with the list of drawer items.
@@ -71,6 +77,25 @@ public class ApplicationDrawerNavigationManager
                             Intent explicitIntent = new Intent(getCurrentActivity(), MainActivity.class);
 
                             getCurrentActivity().startActivity(explicitIntent);
+
+                            getCurrentActivity().finish();
+                        }
+                    }, 235);
+                }
+
+                if(parent.getItemAtPosition(position).toString().equals(getCurrentActivity().getResources().getString(R.string.drawer_weather_forecast)))
+                {
+                    // Allow drawer navigation to close before starting new activity.
+                    new Handler().postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            Intent explicitIntent = new Intent(getCurrentActivity(), WeatherForecastActivity.class);
+
+                            getCurrentActivity().startActivity(explicitIntent);
+
+                            getCurrentActivity().finish();
                         }
                     }, 235);
                 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    style="@style/DrawerLayout">
+
+<android.support.v4.view.ViewPager
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/weather_forecast_view_pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+    <!-- ListView that displays items in the drawer -->
+    <ListView android:id="@+id/drawer_list_view"
+        style="@style/DrawerLayout.ListView"/>
+
+</android.support.v4.widget.DrawerLayout>

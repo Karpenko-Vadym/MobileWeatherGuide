@@ -22,6 +22,7 @@ public class LocationActivity extends AppCompatActivity
     private int selectedLocationIndex = -1;
     private ApplicationSharedPreferenceManager applicationSharedPreferenceManager;
     private ApplicationDrawerNavigationManager applicationDrawerNavigationManager;
+    private boolean isExitConfirmed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,6 +87,8 @@ public class LocationActivity extends AppCompatActivity
                                         // When user clicks on positive button, store selected city in shared preferences and start main activity.
                                         if(LocationActivity.this.getSelectedLocationIndex() == -1)
                                         {
+                                            // TODO: Decide on displaying the error message in ErrorActivity activity.
+
                                             LocationActivity.this.startErrorActivity();
                                         }
 
@@ -126,6 +129,8 @@ public class LocationActivity extends AppCompatActivity
             }
             else // If data from cities.xml string arrays is NOT fetched properly, display an error.
             {
+                // TODO: Decide on displaying the error message in ErrorActivity activity.
+
                 this.startErrorActivity();
             }
         }
@@ -159,6 +164,11 @@ public class LocationActivity extends AppCompatActivity
         {
             this.setApplicationDrawerNavigationManager(new ApplicationDrawerNavigationManager(this, this.getSupportActionBar()));
         }
+
+        if(this.isExitConfirmed())
+        {
+            this.setExitConfirmed(false);
+        }
     }
 
     @Override
@@ -176,10 +186,32 @@ public class LocationActivity extends AppCompatActivity
     @Override
     public void onBackPressed() // This listener listens for navigation bar back button.
     {
-        super.onBackPressed();
+        // When user presses the back button on their device, display confirmation dialog. Once user confirms that he/she wants to exit, exit the application.
+        if(!this.isExitConfirmed())
+        {
+            // Setup AlertDialog and show it.
+            new AlertDialog.Builder(LocationActivity.this).setMessage("Are you sure you want to exit the application?")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            LocationActivity.this.setExitConfirmed(true);
 
-        // Apply exit animation.
-        this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
+                            LocationActivity.this.onBackPressed(); // Invoke onBackPressed() again to exit the application.
+                        }
+                    })
+                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id) { }
+                    }).create().show();
+        }
+        else
+        {
+            super.onBackPressed();
+
+            // Apply exit animation.
+            this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
+        }
     }
 
     // Getters and setters for each property of InitialActivity class.
@@ -211,6 +243,16 @@ public class LocationActivity extends AppCompatActivity
     private void setApplicationSharedPreferenceManager(ApplicationSharedPreferenceManager applicationSharedPreferenceManager)
     {
         this.applicationSharedPreferenceManager = applicationSharedPreferenceManager;
+    }
+
+    public boolean isExitConfirmed()
+    {
+        return this.isExitConfirmed;
+    }
+
+    public void setExitConfirmed(boolean isExitConfirmed)
+    {
+        this.isExitConfirmed = isExitConfirmed;
     }
 
     /*********************************** NAVIGATION METHODS ***********************************/
@@ -246,10 +288,12 @@ public class LocationActivity extends AppCompatActivity
 
                 this.startActivity(explicitIntent);
 
+                this.finish();
+
                 return true;
 
             default:
-                // When action bar hamburger menu item is selected (Left side), pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event
+                // When action bar hamburger menu item is selected (Left side), pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event.
                 return (this.getApplicationDrawerNavigationManager().getActionBarDrawerToggle().onOptionsItemSelected(item) && super.onOptionsItemSelected(item));
         }
     }
@@ -274,6 +318,8 @@ public class LocationActivity extends AppCompatActivity
     // startErrorActivity method start ErrorActivity activity.
     private void startErrorActivity()
     {
+        // TODO: Decide on displaying the error message in ErrorActivity activity.
+
         Intent explicitIntent = new Intent(this, ErrorActivity.class);
 
         this.startActivity(explicitIntent);

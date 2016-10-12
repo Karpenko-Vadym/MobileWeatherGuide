@@ -22,6 +22,8 @@ public class ErrorActivity extends AppCompatActivity
 
         // Set navigation bar (Located at the bottom) color.
         this.getWindow().setNavigationBarColor(this.getResources().getColor(R.color.colorTeal, null));
+
+        // TODO: Decide on displaying the error message in ErrorActivity activity.
     }
 
     @Override

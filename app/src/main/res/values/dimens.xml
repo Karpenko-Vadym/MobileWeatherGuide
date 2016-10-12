@@ -3,6 +3,8 @@
 
     <!-- General -->
     <dimen name="none">0dp</dimen>
+    <dimen name="border">1dp</dimen>
+    <dimen name="border_radius">5dp</dimen>
     <dimen name="status_bar">24dp</dimen>
     <dimen name="toolbar">56dp</dimen>
     <dimen name="title">72dp</dimen>
@@ -25,6 +27,7 @@
     <dimen name="default_button_height">36dp</dimen>
     <dimen name="dense_button_height">32dp</dimen>
     <dimen name="button_corner_radius">6dp</dimen>
+    <dimen name="slide_button_width">48dp</dimen>
 
     <!-- Type sizes -->
     <dimen name="font_caption">12sp</dimen>

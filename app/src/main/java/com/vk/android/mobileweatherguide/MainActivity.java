@@ -1,5 +1,7 @@
 package com.vk.android.mobileweatherguide;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity
 {
     private ApplicationDrawerNavigationManager applicationDrawerNavigationManager;
     private ApplicationSharedPreferenceManager applicationSharedPreferenceManager;
+    private boolean isExitConfirmed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity
             this.setApplicationSharedPreferenceManager(new ApplicationSharedPreferenceManager(this));
         }
 
-        if(WeatherInfo.getInstance().getCurrentWeather() == null || WeatherInfo.getInstance().getCurrentWeather().getUvIndex() == null || WeatherInfo.getInstance().getHourlyForecast() == null || WeatherInfo.getInstance().getHourlyForecast().getList() == null || WeatherInfo.getInstance().getHourlyForecast().getList().length <= 4)
+        if(WeatherInfo.getInstance().getCurrentWeather() == null || WeatherInfo.getInstance().getCurrentWeather().getUvIndex() == null || WeatherInfo.getInstance().getHourlyForecast() == null || WeatherInfo.getInstance().getHourlyForecast().getList() == null || WeatherInfo.getInstance().getHourlyForecast().getList().length < Integer.parseInt(this.getString(R.string.hourly_weather_count_url)))
         {
             // If any of required information is missing, send a request to fetch required information.
             String url = this.getString(R.string.current_weather_url) + this.getApplicationSharedPreferenceManager().getLocationId() + "&" + this.getString(R.string.url_api_key);
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if(WeatherInfo.getInstance().getCurrentWeather() != null && !this.getApplicationSharedPreferenceManager().getLocationId().equals(WeatherInfo.getInstance().getCurrentWeather().getId()))
         {
-            // If any of required information is missing, send a request to fetch required information.
+            // If location id stored in current object object does not match the location id stored in shared preferences, fetch required information for correct location id.
             String url = this.getString(R.string.current_weather_url) + this.getApplicationSharedPreferenceManager().getLocationId() + "&" + this.getString(R.string.url_api_key);
 
             JsonObjectRequest jsonCurrentWeatherRequest = new JsonObjectRequest(Request.Method.GET, url, null, this.getResponseListener(), this.getErrorListener());
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            MainActivity.this.populateContent(); // If required information is present, display it.
+            this.populateContent(); // If required information is present, display it.
         }
     }
 
@@ -117,10 +120,32 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() // This listener listens for navigation bar back button.
     {
-        super.onBackPressed();
+        // When user presses the back button on their device, display confirmation dialog. Once user confirms that he/she wants to exit, exit the application.
+        if(!this.isExitConfirmed())
+        {
+            // Setup AlertDialog and show it.
+            new AlertDialog.Builder(MainActivity.this).setMessage("Are you sure you want to exit the application?")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            MainActivity.this.setExitConfirmed(true);
 
-        // Apply exit animation.
-        this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
+                            MainActivity.this.onBackPressed(); // Invoke onBackPressed() again to exit the application.
+                        }
+                    })
+                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int id) { }
+                    }).create().show();
+        }
+        else
+        {
+            super.onBackPressed();
+
+            // Apply exit animation.
+            this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
+        }
     }
 
     private ApplicationSharedPreferenceManager getApplicationSharedPreferenceManager()
@@ -131,6 +156,15 @@ public class MainActivity extends AppCompatActivity
     private void setApplicationSharedPreferenceManager(ApplicationSharedPreferenceManager applicationSharedPreferenceManager)
     {
         this.applicationSharedPreferenceManager = applicationSharedPreferenceManager;
+    }
+
+    public boolean isExitConfirmed()
+    {
+        return this.isExitConfirmed;
+    }
+
+    public void setExitConfirmed(boolean isExitConfirmed) {
+        this.isExitConfirmed = isExitConfirmed;
     }
 
     /*********************************** NAVIGATION METHODS ***********************************/
@@ -166,6 +200,8 @@ public class MainActivity extends AppCompatActivity
 
                 this.startActivity(explicitIntent);
 
+                this.finish();
+
                 return true;
 
             case R.id.menu_item_notification:
@@ -173,10 +209,12 @@ public class MainActivity extends AppCompatActivity
 
                 this.startActivity(explicitIntent);
 
+                this.finish();
+
                 return true;
 
             default:
-                // When action bar hamburger menu item is selected (Left side), pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event
+                // When action bar hamburger menu item is selected (Left side), pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event.
                 return (this.getApplicationDrawerNavigationManager().getActionBarDrawerToggle().onOptionsItemSelected(item) && super.onOptionsItemSelected(item));
         }
 
@@ -202,6 +240,8 @@ public class MainActivity extends AppCompatActivity
     // startErrorActivity method start ErrorActivity activity.
     private void startErrorActivity()
     {
+        // TODO: Decide on displaying the error message in ErrorActivity activity.
+
         Intent explicitIntent = new Intent(this, ErrorActivity.class);
 
         this.startActivity(explicitIntent);
@@ -266,7 +306,7 @@ public class MainActivity extends AppCompatActivity
                     // TODO: Add forecast api call here. URI: http://api.openweathermap.org/data/2.5/forecast/daily?id=6167865&appid=d9d8bec8ab1806f5096d7734167da78e
 
                     // Send a request to fetch hourly data.
-                    String url = MainActivity.this.getString(R.string.hourly_weather_url) + MainActivity.this.getApplicationSharedPreferenceManager().getLocationId() + "&" + MainActivity.this.getString(R.string.url_api_key);
+                    String url = MainActivity.this.getString(R.string.hourly_weather_url) + MainActivity.this.getApplicationSharedPreferenceManager().getLocationId() + "&cnt=" + MainActivity.this.getString(R.string.hourly_weather_count_url) + "&" + MainActivity.this.getString(R.string.url_api_key);
 
                     JsonObjectRequest jsonCurrentHourlyWeatherRequest = new JsonObjectRequest(Request.Method.GET, url, null, MainActivity.this.getResponseListener(), MainActivity.this.getErrorListener());
 
@@ -280,6 +320,8 @@ public class MainActivity extends AppCompatActivity
                 }
                 else
                 {
+                    // TODO: Decide on displaying the error message in ErrorActivity activity.
+
                     MainActivity.this.startErrorActivity();
                 }
             }
@@ -306,12 +348,24 @@ public class MainActivity extends AppCompatActivity
     {
         if(WeatherInfo.getInstance().getCurrentWeather() != null) // Validate that CurrentWeather object has been set, if so, proceed. Otherwise, display an error.
         {
+            // Set icons.
+            this.findViewById(R.id.current_weather_uv_index_icon).setBackgroundResource(R.drawable.uv_index);
+            this.findViewById(R.id.current_weather_humidity_icon).setBackgroundResource(R.drawable.humidity_index);
+            this.findViewById(R.id.current_weather_wind_icon).setBackgroundResource(R.drawable.wind_index);
+
+            // Set next 12 hours text and background resource for each of 3 hour step.
+            ((TextView) this.findViewById(R.id.hourly_forecast_title)).setText(this.getString(R.string.current_weather_next_12_hours));
+            this.findViewById(R.id.hourly_forecast_three_layout).setBackgroundResource(R.drawable.dark_grey_rectangle_rounded_corners);
+            this.findViewById(R.id.hourly_forecast_six_layout).setBackgroundResource(R.drawable.dark_grey_rectangle_rounded_corners);
+            this.findViewById(R.id.hourly_forecast_nine_layout).setBackgroundResource(R.drawable.dark_grey_rectangle_rounded_corners);
+            this.findViewById(R.id.hourly_forecast_twelve_layout).setBackgroundResource(R.drawable.dark_grey_rectangle_rounded_corners);
+
             // Validate value for each field and set each field.
 
             // Set current location.
             if (WeatherInfo.getInstance().getCurrentWeather().getName() != null  && WeatherInfo.getInstance().getCurrentWeather().getSys() != null && WeatherInfo.getInstance().getCurrentWeather().getSys().getCountry() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_current_location)).setText(String.format(Locale.CANADA, "%s, %s",WeatherInfo.getInstance().getCurrentWeather().getName(), WeatherInfo.getInstance().getCurrentWeather().getSys().getCountry()));
+                ((TextView) this.findViewById(R.id.current_weather_current_location)).setText(String.format(Locale.CANADA, "%s, %s", WeatherInfo.getInstance().getCurrentWeather().getName(), WeatherInfo.getInstance().getCurrentWeather().getSys().getCountry()));
             }
 
             // Set current temperature value.
@@ -323,7 +377,7 @@ public class MainActivity extends AppCompatActivity
             // Set date and time of the weather update result.
             if(WeatherInfo.getInstance().getCurrentWeather().getDt() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_date)).setText(new SimpleDateFormat("EEE, d MMM h:mm a", Locale.CANADA).format(new Date(Integer.parseInt(WeatherInfo.getInstance().getCurrentWeather().getDt()) * 1000)));
+                ((TextView) this.findViewById(R.id.current_weather_date)).setText(new SimpleDateFormat("EEE, d MMM h:mm a", Locale.CANADA).format(new Date(Integer.parseInt(WeatherInfo.getInstance().getCurrentWeather().getDt()) * (long) 1000)));
             }
 
             // Set weather description value.
@@ -365,33 +419,33 @@ public class MainActivity extends AppCompatActivity
             }
 
             // Set humidity value.
-            if(WeatherInfo.getInstance().getCurrentWeather().getMain()!= null && WeatherInfo.getInstance().getCurrentWeather().getMain().getHumidity() > 0)
+            if(WeatherInfo.getInstance().getCurrentWeather().getMain()!= null)
             {
                 ((TextView) this.findViewById(R.id.current_weather_humidity)).setText(String.format(Locale.CANADA, "%d%%", WeatherInfo.getInstance().getCurrentWeather().getMain().getHumidity()));
             }
 
             // Set wind value.
-            if(WeatherInfo.getInstance().getCurrentWeather().getWind() != null && WeatherInfo.getInstance().getCurrentWeather().getWind().getSpeed() > 0)
+            if(WeatherInfo.getInstance().getCurrentWeather().getWind() != null)
             {
                 ((TextView) this.findViewById(R.id.current_weather_wind)).setText(String.format(Locale.CANADA, "%s %.2f m/s", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getCurrentWeather().getWind().getDeg()), WeatherInfo.getInstance().getCurrentWeather().getWind().getSpeed()));
             }
 
             // Set pressure value.
-            if(WeatherInfo.getInstance().getCurrentWeather().getMain() != null && WeatherInfo.getInstance().getCurrentWeather().getMain().getPressure() > 0)
+            if(WeatherInfo.getInstance().getCurrentWeather().getMain() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f kPa", WeatherInfo.getInstance().getCurrentWeather().getMain().getPressureKPA(WeatherInfo.getInstance().getCurrentWeather().getMain().getPressure())));
+                ((TextView) this.findViewById(R.id.current_weather_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f kPa", WeatherInfo.getInstance().getPressureKPA(WeatherInfo.getInstance().getCurrentWeather().getMain().getPressure())));
             }
 
             // Set sunset value.
             if(WeatherInfo.getInstance().getCurrentWeather().getSys() != null && WeatherInfo.getInstance().getCurrentWeather().getSys().getSunset() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_sunset)).setText(String.format(Locale.CANADA, "Sunset: %s", new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getCurrentWeather().getSys().getSunset()) * 1000))));
+                ((TextView) this.findViewById(R.id.current_weather_sunset)).setText(String.format(Locale.CANADA, "Sunset: %s", new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getCurrentWeather().getSys().getSunset()) * (long) 1000))));
             }
 
             // Set sunrise value.
             if(WeatherInfo.getInstance().getCurrentWeather().getSys() != null && WeatherInfo.getInstance().getCurrentWeather().getSys().getSunrise() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_sunrise)).setText(String.format(Locale.CANADA, "Sunrise: %s", new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getCurrentWeather().getSys().getSunrise()) * 1000))));
+                ((TextView) this.findViewById(R.id.current_weather_sunrise)).setText(String.format(Locale.CANADA, "Sunrise: %s", new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getCurrentWeather().getSys().getSunrise()) * (long) 1000))));
             }
 
             // Set cloudiness value.
@@ -408,12 +462,12 @@ public class MainActivity extends AppCompatActivity
             }
 
             // Set hourly forecasting properties.
-            if(WeatherInfo.getInstance().getHourlyForecast().getList() != null && WeatherInfo.getInstance().getHourlyForecast().getList().length >= 4)
+            if(WeatherInfo.getInstance().getHourlyForecast().getList() != null && WeatherInfo.getInstance().getHourlyForecast().getList().length >= Integer.parseInt(this.getString(R.string.hourly_weather_count_url)))
             {
                 // Set in three hours icon property.
-                if(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather().length >= 1 && WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather()[0].getIcon() != null)
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather().length > 0 && WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather()[0].getIcon() != null)
                 {
-                    (this.findViewById(R.id.hourly_forecast_three_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather()[0].getIcon()));
+                    this.findViewById(R.id.hourly_forecast_three_icon).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getWeather()[0].getIcon()));
                 }
 
                 // Set in three hours temperature property.
@@ -425,13 +479,13 @@ public class MainActivity extends AppCompatActivity
                 // Set in three hours time property.
                 if(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getDt() != null)
                 {
-                    ((TextView) this.findViewById(R.id.hourly_forecast_three_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getDt()) * 1000)));
+                    ((TextView) this.findViewById(R.id.hourly_forecast_three_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getDt()) * (long) 1000)));
                 }
 
                 // Set in six hours icon property.
-                if(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather().length >= 1 && WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather()[0].getIcon() != null)
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather().length > 0 && WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather()[0].getIcon() != null)
                 {
-                    (this.findViewById(R.id.hourly_forecast_six_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather()[0].getIcon()));
+                    this.findViewById(R.id.hourly_forecast_six_icon).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getWeather()[0].getIcon()));
                 }
 
                 // Set in six hours temperature property.
@@ -443,13 +497,13 @@ public class MainActivity extends AppCompatActivity
                 // Set in six hours time property.
                 if(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getDt() != null)
                 {
-                    ((TextView) this.findViewById(R.id.hourly_forecast_six_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getDt()) * 1000)));
+                    ((TextView) this.findViewById(R.id.hourly_forecast_six_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getDt()) * (long) 1000)));
                 }
 
                 // Set in nine hours icon property.
-                if(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather().length >= 1 && WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather()[0].getIcon() != null)
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather().length > 0 && WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather()[0].getIcon() != null)
                 {
-                    (this.findViewById(R.id.hourly_forecast_nine_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather()[0].getIcon()));
+                    this.findViewById(R.id.hourly_forecast_nine_icon).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getWeather()[0].getIcon()));
                 }
 
                 // Set in nine hours temperature property.
@@ -461,13 +515,13 @@ public class MainActivity extends AppCompatActivity
                 // Set in nine hours time property.
                 if(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getDt() != null)
                 {
-                    ((TextView) this.findViewById(R.id.hourly_forecast_nine_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getDt()) * 1000)));
+                    ((TextView) this.findViewById(R.id.hourly_forecast_nine_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getDt()) * (long) 1000)));
                 }
 
                 // Set in twelve hours icon property.
-                if(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather().length >= 1 && WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather()[0].getIcon() != null)
+                if(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather() != null && WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather().length > 0 && WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather()[0].getIcon() != null)
                 {
-                    (this.findViewById(R.id.hourly_forecast_twelve_icon)).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather()[0].getIcon()));
+                    this.findViewById(R.id.hourly_forecast_twelve_icon).setBackgroundResource(this.getIconResource(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getWeather()[0].getIcon()));
                 }
 
                 // Set in twelve hours temperature property.
@@ -479,13 +533,15 @@ public class MainActivity extends AppCompatActivity
                 // Set in twelve hours time property.
                 if(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getDt() != null)
                 {
-                    ((TextView) this.findViewById(R.id.hourly_forecast_twelve_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getDt()) * 1000)));
+                    ((TextView) this.findViewById(R.id.hourly_forecast_twelve_time)).setText(new SimpleDateFormat("h:mm a", Locale.CANADA).format(new Date((long) Integer.parseInt(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getDt()) * (long) 1000)));
                 }
 
             }
         }
         else
         {
+            // TODO: Decide on displaying the error message in ErrorActivity activity.
+
             this.startErrorActivity();
         }
     }
