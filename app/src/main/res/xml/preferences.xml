@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/preferences_category_units">
+
+        <ListPreference
+            android:key="preferences_temperature_units"
+            android:title="@string/preferences_temperature_units_title"
+            android:summary="@string/preferences_temperature_units_summary"
+            android:entries="@array/preferences_temperature_units_entries"
+            android:entryValues="@array/preferences_temperature_units_values"
+            android:defaultValue="@string/preferences_temperature_units_default" />
+
+        <ListPreference
+            android:key="preferences_wind_speed_units"
+            android:title="@string/preferences_wind_speed_units_title"
+            android:summary="@string/preferences_wind_speed_units_summary"
+            android:entries="@array/preferences_wind_speed_units_entries"
+            android:entryValues="@array/preferences_wind_speed_units_values"
+            android:defaultValue="@string/preferences_wind_speed_units_default" />
+
+        <ListPreference
+            android:key="preferences_pressure_units"
+            android:title="@string/preferences_pressure_units_title"
+            android:summary="@string/preferences_pressure_units_summary"
+            android:entries="@array/preferences_pressure_units_entries"
+            android:entryValues="@array/preferences_pressure_units_values"
+            android:defaultValue="@string/preferences_pressure_units_default" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

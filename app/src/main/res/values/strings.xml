@@ -5,6 +5,7 @@
     <string name="location_display_name">location_display_name</string>
     <string name="menu_location">Location</string>
     <string name="menu_notifications">Notifications</string>
+    <string name="menu_preferences">Preferences</string>
     <string name="url_api_key">appid=d9d8bec8ab1806f5096d7734167da78e</string>
     <string name="current_weather_url">http://api.openweathermap.org/data/2.5/weather?id=</string>
     <string name="current_uvindex_url">http://api.openweathermap.org/v3/uvi/</string>
@@ -42,5 +43,51 @@
     <string name="icon_uvindex">UV Index Icon</string>
     <string name="icon_wind">Wind Icon</string>
     <string name="hourly_forecast_three_icon">Hourly Forecast Next 3 Hours Icon</string>
+
+
+
+    <!-- Preferences strings -->
+    <string name="preferences_category_units">Units</string>
+    <string name="preferences_temperature_units">preferences_temperature_units</string>
+    <string name="preferences_wind_speed_units">preferences_wind_speed_units</string>
+    <string name="preferences_pressure_units">preferences_pressure_units</string>
+    <string name="preferences_temperature_units_title">Temperature Units</string>
+    <string name="preferences_temperature_units_summary">Set the temperature units</string>
+    <string name="preferences_temperature_units_default">2</string>
+    <string name="preferences_wind_speed_units_title">Wind Speed Units</string>
+    <string name="preferences_wind_speed_units_summary">Set the wind speed units</string>
+    <string name="preferences_wind_speed_units_default">2</string>
+    <string name="preferences_pressure_units_title">Pressure Units</string>
+    <string name="preferences_pressure_units_summary">Set the pressure units</string>
+    <string name="preferences_pressure_units_default">2</string>
+
+
+    <!-- Preferences arrays -->
+    <string-array name="preferences_temperature_units_entries">
+        <item name="fahrenheit">Fahrenheit (&#176;F)</item>
+        <item name="celsius">Celsius (&#176;C)</item>
+    </string-array>
+    <string-array name="preferences_temperature_units_values">
+        <item name="fahrenheit">1</item>
+        <item name="celsius">2</item>
+    </string-array>
+
+    <string-array name="preferences_wind_speed_units_entries">
+        <item name="km_h">Kilometers per hour (km/h)</item>
+        <item name="m_s">Meters per second (m/s)</item>
+    </string-array>
+    <string-array name="preferences_wind_speed_units_values">
+        <item name="km_h">1</item>
+        <item name="m_s">2</item>
+    </string-array>
+
+    <string-array name="preferences_pressure_units_entries">
+        <item name="mbar">Millibars (mbar)</item>
+        <item name="kPa">Kilopascals (kPa)</item>
+    </string-array>
+    <string-array name="preferences_pressure_units_values">
+        <item name="mbar">1</item>
+        <item name="kPa">2</item>
+    </string-array>
 
 </resources>

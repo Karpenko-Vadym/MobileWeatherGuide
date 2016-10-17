@@ -22,6 +22,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".WeatherForecastActivity" />
+        <activity android:name=".UserPreferenceActivity"></activity>
     </application>
 
 </manifest>

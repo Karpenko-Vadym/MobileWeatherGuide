@@ -373,6 +373,15 @@ public class WeatherForecastActivity extends AppCompatActivity
 
                 return true;
 
+            case R.id.menu_item_preferences:
+                explicitIntent = new Intent(this, UserPreferenceActivity.class); // If right side menu Preferences menu item is selected, start UserPreferenceActivity activity.
+
+                this.startActivity(explicitIntent);
+
+                this.finish();
+
+                return true;
+
             default:
                 // When action bar hamburger menu item is selected (Left side), pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event.
                 return (this.getApplicationDrawerNavigationManager().getActionBarDrawerToggle().onOptionsItemSelected(item) && super.onOptionsItemSelected(item));

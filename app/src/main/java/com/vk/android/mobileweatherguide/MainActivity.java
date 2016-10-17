@@ -2,6 +2,7 @@ package com.vk.android.mobileweatherguide;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -213,6 +214,15 @@ public class MainActivity extends AppCompatActivity
 
                 return true;
 
+            case R.id.menu_item_preferences:
+                explicitIntent = new Intent(this, UserPreferenceActivity.class); // If right side menu Preferences menu item is selected, start UserPreferenceActivity activity.
+
+                this.startActivity(explicitIntent);
+
+                this.finish();
+
+                return true;
+
             default:
                 // When action bar hamburger menu item is selected (Left side), pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event.
                 return (this.getApplicationDrawerNavigationManager().getActionBarDrawerToggle().onOptionsItemSelected(item) && super.onOptionsItemSelected(item));
@@ -371,7 +381,23 @@ public class MainActivity extends AppCompatActivity
             // Set current temperature value.
             if (WeatherInfo.getInstance().getCurrentWeather().getMain() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp())), (char) 0x00B0));
+                String temperaturePreference = PreferenceManager.getDefaultSharedPreferences(this).getString(this.getString(R.string.preferences_temperature_units), null);
+
+                if(temperaturePreference != null)
+                {
+                    if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[0]))
+                    {
+                        ((TextView) this.findViewById(R.id.current_weather_temperature)).setText(String.format(Locale.CANADA, "%d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp())), (char) 0x00B0));
+                    }
+                    else if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[1]))
+                    {
+                        ((TextView) this.findViewById(R.id.current_weather_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp())), (char) 0x00B0));
+                    }
+                }
+                else
+                {
+                    ((TextView) this.findViewById(R.id.current_weather_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getCurrentWeather().getMain().getTemp())), (char) 0x00B0));
+                }
             }
 
             // Set date and time of the weather update result.
@@ -427,13 +453,45 @@ public class MainActivity extends AppCompatActivity
             // Set wind value.
             if(WeatherInfo.getInstance().getCurrentWeather().getWind() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_wind)).setText(String.format(Locale.CANADA, "%s %.2f m/s", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getCurrentWeather().getWind().getDeg()), WeatherInfo.getInstance().getCurrentWeather().getWind().getSpeed()));
+                String windPreference = PreferenceManager.getDefaultSharedPreferences(this).getString(this.getString(R.string.preferences_wind_speed_units), null);
+
+                if(windPreference != null)
+                {
+                    if (windPreference.equals(this.getResources().getStringArray(R.array.preferences_wind_speed_units_values)[0]))
+                    {
+                        ((TextView) this.findViewById(R.id.current_weather_wind)).setText(String.format(Locale.CANADA, "%s %.2f km/h", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getCurrentWeather().getWind().getDeg()), WeatherInfo.getInstance().getKilometersPerHour(WeatherInfo.getInstance().getCurrentWeather().getWind().getSpeed())));
+                    }
+                    else if (windPreference.equals(this.getResources().getStringArray(R.array.preferences_wind_speed_units_values)[1]))
+                    {
+                        ((TextView) this.findViewById(R.id.current_weather_wind)).setText(String.format(Locale.CANADA, "%s %.2f m/s", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getCurrentWeather().getWind().getDeg()), WeatherInfo.getInstance().getCurrentWeather().getWind().getSpeed()));
+                    }
+                }
+                else
+                {
+                    ((TextView) this.findViewById(R.id.current_weather_wind)).setText(String.format(Locale.CANADA, "%s %.2f m/s", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getCurrentWeather().getWind().getDeg()), WeatherInfo.getInstance().getCurrentWeather().getWind().getSpeed()));
+                }
             }
 
             // Set pressure value.
             if(WeatherInfo.getInstance().getCurrentWeather().getMain() != null)
             {
-                ((TextView) this.findViewById(R.id.current_weather_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f kPa", WeatherInfo.getInstance().getPressureKPA(WeatherInfo.getInstance().getCurrentWeather().getMain().getPressure())));
+                String pressurePreference = PreferenceManager.getDefaultSharedPreferences(this).getString(this.getString(R.string.preferences_pressure_units), null);
+
+                if(pressurePreference != null)
+                {
+                    if (pressurePreference.equals(this.getResources().getStringArray(R.array.preferences_pressure_units_values)[0]))
+                    {
+                        ((TextView) this.findViewById(R.id.current_weather_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f mbar", WeatherInfo.getInstance().getCurrentWeather().getMain().getPressure()));
+                    }
+                    else if (pressurePreference.equals(this.getResources().getStringArray(R.array.preferences_pressure_units_values)[1]))
+                    {
+                        ((TextView) this.findViewById(R.id.current_weather_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f kPa", WeatherInfo.getInstance().getPressureKPA(WeatherInfo.getInstance().getCurrentWeather().getMain().getPressure())));
+                    }
+                }
+                else
+                {
+                    ((TextView) this.findViewById(R.id.current_weather_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f kPa", WeatherInfo.getInstance().getPressureKPA(WeatherInfo.getInstance().getCurrentWeather().getMain().getPressure())));
+                }
             }
 
             // Set sunset value.
@@ -473,7 +531,23 @@ public class MainActivity extends AppCompatActivity
                 // Set in three hours temperature property.
                 if(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getMain() != null)
                 {
-                    ((TextView) this.findViewById(R.id.hourly_forecast_three_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getMain().getTemp())), (char) 0x00B0));
+                    String temperaturePreference = PreferenceManager.getDefaultSharedPreferences(this).getString(this.getString(R.string.preferences_temperature_units), null);
+
+                    if(temperaturePreference != null)
+                    {
+                        if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[0]))
+                        {
+                            ((TextView) this.findViewById(R.id.hourly_forecast_three_temperature)).setText(String.format(Locale.CANADA, "%d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getMain().getTemp())), (char) 0x00B0));
+                        }
+                        else if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[1]))
+                        {
+                            ((TextView) this.findViewById(R.id.hourly_forecast_three_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getMain().getTemp())), (char) 0x00B0));
+                        }
+                    }
+                    else
+                    {
+                        ((TextView) this.findViewById(R.id.hourly_forecast_three_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[0].getMain().getTemp())), (char) 0x00B0));
+                    }
                 }
 
                 // Set in three hours time property.
@@ -491,7 +565,23 @@ public class MainActivity extends AppCompatActivity
                 // Set in six hours temperature property.
                 if(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getMain() != null)
                 {
-                    ((TextView) this.findViewById(R.id.hourly_forecast_six_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getMain().getTemp())), (char) 0x00B0));
+                    String temperaturePreference = PreferenceManager.getDefaultSharedPreferences(this).getString(this.getString(R.string.preferences_temperature_units), null);
+
+                    if(temperaturePreference != null)
+                    {
+                        if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[0]))
+                        {
+                            ((TextView) this.findViewById(R.id.hourly_forecast_six_temperature)).setText(String.format(Locale.CANADA, "%d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getMain().getTemp())), (char) 0x00B0));
+                        }
+                        else if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[1]))
+                        {
+                            ((TextView) this.findViewById(R.id.hourly_forecast_six_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getMain().getTemp())), (char) 0x00B0));
+                        }
+                    }
+                    else
+                    {
+                        ((TextView) this.findViewById(R.id.hourly_forecast_six_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[1].getMain().getTemp())), (char) 0x00B0));
+                    }
                 }
 
                 // Set in six hours time property.
@@ -509,7 +599,23 @@ public class MainActivity extends AppCompatActivity
                 // Set in nine hours temperature property.
                 if(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getMain() != null)
                 {
-                    ((TextView) this.findViewById(R.id.hourly_forecast_nine_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getMain().getTemp())), (char) 0x00B0));
+                    String temperaturePreference = PreferenceManager.getDefaultSharedPreferences(this).getString(this.getString(R.string.preferences_temperature_units), null);
+
+                    if(temperaturePreference != null)
+                    {
+                        if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[0]))
+                        {
+                            ((TextView) this.findViewById(R.id.hourly_forecast_nine_temperature)).setText(String.format(Locale.CANADA, "%d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getMain().getTemp())), (char) 0x00B0));
+                        }
+                        else if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[1]))
+                        {
+                            ((TextView) this.findViewById(R.id.hourly_forecast_nine_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getMain().getTemp())), (char) 0x00B0));
+                        }
+                    }
+                    else
+                    {
+                        ((TextView) this.findViewById(R.id.hourly_forecast_nine_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[2].getMain().getTemp())), (char) 0x00B0));
+                    }
                 }
 
                 // Set in nine hours time property.
@@ -527,7 +633,23 @@ public class MainActivity extends AppCompatActivity
                 // Set in twelve hours temperature property.
                 if(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getMain() != null)
                 {
-                    ((TextView) this.findViewById(R.id.hourly_forecast_twelve_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getMain().getTemp())), (char) 0x00B0));
+                    String temperaturePreference = PreferenceManager.getDefaultSharedPreferences(this).getString(this.getString(R.string.preferences_temperature_units), null);
+
+                    if(temperaturePreference != null)
+                    {
+                        if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[0]))
+                        {
+                            ((TextView) this.findViewById(R.id.hourly_forecast_twelve_temperature)).setText(String.format(Locale.CANADA, "%d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getMain().getTemp())), (char) 0x00B0));
+                        }
+                        else if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[1]))
+                        {
+                            ((TextView) this.findViewById(R.id.hourly_forecast_twelve_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getMain().getTemp())), (char) 0x00B0));
+                        }
+                    }
+                    else
+                    {
+                        ((TextView) this.findViewById(R.id.hourly_forecast_twelve_temperature)).setText(String.format(Locale.CANADA, "%d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getHourlyForecast().getList()[3].getMain().getTemp())), (char) 0x00B0));
+                    }
                 }
 
                 // Set in twelve hours time property.

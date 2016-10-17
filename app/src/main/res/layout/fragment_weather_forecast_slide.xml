@@ -24,11 +24,20 @@
 
     <TextView
         style="@style/TextView"
-        android:id="@+id/weather_forecast_humidity"
+        android:id="@+id/weather_forecast_date"
         android:layout_alignParentStart="true"
         android:textSize="@dimen/font_subheading"
         android:layout_marginTop="@dimen/small_gap_between_content_areas"
         android:layout_below="@id/weather_forecast_description"
+        android:text="" />
+
+    <TextView
+        style="@style/TextView"
+        android:id="@+id/weather_forecast_humidity"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/font_subheading"
+        android:layout_marginTop="@dimen/space_between_content_areas"
+        android:layout_below="@id/weather_forecast_date"
         android:text="" />
 
     <TextView
@@ -55,16 +64,8 @@
         android:textSize="@dimen/font_subheading"
         android:layout_alignParentStart="true"
         android:layout_marginTop="@dimen/space_between_content_areas"
+        android:layout_marginBottom="@dimen/small_gap_between_content_areas"
         android:layout_below="@id/weather_forecast_pressure"
-        android:text="" />
-
-    <TextView
-        style="@style/TextView"
-        android:id="@+id/weather_forecast_date"
-        android:layout_alignParentStart="true"
-        android:textSize="@dimen/font_subheading"
-        android:layout_marginTop="@dimen/space_between_content_areas"
-        android:layout_below="@id/weather_forecast_cloudiness"
         android:text="" />
 
     <TextView
@@ -74,8 +75,8 @@
         android:textSize="@dimen/font_subheading"
         android:textColor="@color/colorDirtyWhite"
         android:gravity="center"
-        android:layout_marginTop="@dimen/small_gap_between_content_areas"
-        android:layout_below="@id/weather_forecast_date"
+        android:layout_marginTop="@dimen/space_between_content_areas"
+        android:layout_below="@id/weather_forecast_cloudiness"
         android:text="" />
 
     <!-- Layout for containing SquareView -->
@@ -101,6 +102,7 @@
         android:layout_width="@dimen/slide_button_width"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/small_gap_between_content_areas"
+        android:layout_marginBottom="@dimen/space_between_content_areas"
         android:layout_alignParentStart="true"
         android:layout_below="@id/weather_forecast_temperature_title"
         android:textSize="@dimen/font_headline"
@@ -114,6 +116,7 @@
         android:layout_width="@dimen/slide_button_width"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/small_gap_between_content_areas"
+        android:layout_marginBottom="@dimen/space_between_content_areas"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/weather_forecast_temperature_title"
         android:textSize="@dimen/font_headline"
@@ -134,6 +137,7 @@
         android:layout_toEndOf="@id/weather_forecast_slide_left"
         android:layout_marginStart="@dimen/space_between_content_areas"
         android:layout_marginEnd="@dimen/space_between_content_areas"
+        android:layout_marginBottom="@dimen/space_between_content_areas"
         android:text="" />
 
     <LinearLayout

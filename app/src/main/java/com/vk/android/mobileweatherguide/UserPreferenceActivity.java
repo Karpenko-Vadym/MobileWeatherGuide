@@ -1,18 +1,20 @@
 package com.vk.android.mobileweatherguide;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class NotificationActivity extends AppCompatActivity
-{
+
+public class UserPreferenceActivity extends AppCompatActivity {
+
     private ApplicationDrawerNavigationManager applicationDrawerNavigationManager;
-    private ApplicationSharedPreferenceManager applicationSharedPreferenceManager;
     private boolean isExitConfirmed;
 
     @Override
@@ -25,25 +27,20 @@ public class NotificationActivity extends AppCompatActivity
         // Apply enter animation.
         this.overridePendingTransition(R.anim.activity_enter_animation_in, R.anim.activity_enter_animation_out);
 
-        this.setContentView(R.layout.activity_notification);
+        this.setContentView(R.layout.activity_user_preference);
 
-        this.setTitle(this.getResources().getString(R.string.menu_notifications));
+        // Add UserPreferenceFragment fragment to activity_user_preference container in activity_user_preference layout.
+        FragmentManager fragmentManager = this.getFragmentManager();
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.add(R.id.activity_user_preferences, UserPreferenceFragment.getInstance()).commit();
+
+        this.setTitle(this.getResources().getString(R.string.menu_preferences));
 
         this.setApplicationDrawerNavigationManager(new ApplicationDrawerNavigationManager(this, this.getSupportActionBar()));
 
-        this.setApplicationSharedPreferenceManager(new ApplicationSharedPreferenceManager(this)); // Instantiate applicationSharedPreferenceManager property.
-
         /**** END OF SETUP ****/
-
-        if(!this.getApplicationSharedPreferenceManager().validatePreferences()) // Check if preferences were previously set.
-        {
-            // If preferences (Location id and location display name) were previously set, start initial activity.
-            Intent explicitIntent = new Intent(this, InitialActivity.class);
-
-            this.startActivity(explicitIntent);
-
-            this.finish(); // Shut down current activity.
-        }
     }
 
     @Override
@@ -54,11 +51,6 @@ public class NotificationActivity extends AppCompatActivity
         if(this.getApplicationDrawerNavigationManager() == null) // If applicationDrawerNavigationManager property is not set, set it.
         {
             this.setApplicationDrawerNavigationManager(new ApplicationDrawerNavigationManager(this, this.getSupportActionBar()));
-        }
-
-        if(this.getApplicationSharedPreferenceManager() == null) // If applicationSharedPreferenceManager property is not set, set it.
-        {
-            this.setApplicationSharedPreferenceManager(new ApplicationSharedPreferenceManager(this));
         }
     }
 
@@ -79,14 +71,14 @@ public class NotificationActivity extends AppCompatActivity
         if(!this.isExitConfirmed())
         {
             // Setup AlertDialog and show it.
-            new AlertDialog.Builder(NotificationActivity.this).setMessage("Are you sure you want to exit the application?")
+            new AlertDialog.Builder(UserPreferenceActivity.this).setMessage("Are you sure you want to exit the application?")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface dialog, int id)
                         {
-                            NotificationActivity.this.setExitConfirmed(true);
+                            UserPreferenceActivity.this.setExitConfirmed(true);
 
-                            NotificationActivity.this.onBackPressed(); // Invoke onBackPressed() again to exit the application.
+                            UserPreferenceActivity.this.onBackPressed(); // Invoke onBackPressed() again to exit the application.
                         }
                     })
                     .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
@@ -101,16 +93,6 @@ public class NotificationActivity extends AppCompatActivity
             // Apply exit animation.
             this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
         }
-    }
-
-    private ApplicationSharedPreferenceManager getApplicationSharedPreferenceManager()
-    {
-        return this.applicationSharedPreferenceManager;
-    }
-
-    private void setApplicationSharedPreferenceManager(ApplicationSharedPreferenceManager applicationSharedPreferenceManager)
-    {
-        this.applicationSharedPreferenceManager = applicationSharedPreferenceManager;
     }
 
     public boolean isExitConfirmed()
@@ -160,8 +142,8 @@ public class NotificationActivity extends AppCompatActivity
 
                 return true;
 
-            case R.id.menu_item_preferences:
-                explicitIntent = new Intent(this, UserPreferenceActivity.class); // If right side menu Preferences menu item is selected, start UserPreferenceActivity activity.
+            case R.id.menu_item_notification:
+                explicitIntent = new Intent(this, NotificationActivity.class); // If right side menu Notifications menu item is selected, start NotificationActivity activity.
 
                 this.startActivity(explicitIntent);
 
@@ -182,7 +164,7 @@ public class NotificationActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) // This event listener only called once, when the menu is first displayed, and it is used to initialize Activity's standard options menu.
     {
         // Inflate menu defined in app_menu.xml
-        this.getMenuInflater().inflate(R.menu.app_menu_notifications, menu);
+        this.getMenuInflater().inflate(R.menu.app_menu_preferences, menu);
 
         return true;
     }

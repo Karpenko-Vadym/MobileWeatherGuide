@@ -52,9 +52,6 @@ public class ApplicationDrawerNavigationManager
 
         // TODO: Include remaining activities ^
 
-
-
-
         this.getDrawerListView().setAdapter(new ArrayAdapter<>(this.getCurrentActivity(), R.layout.support_simple_spinner_dropdown_item, drawerItems)); // Set adapter for drawer list view with the list of drawer items.
 
         this.getDrawerLayout().setScrimColor(this.getCurrentActivity().getColor(R.color.colorNightShade)); // Set drawer overlay color.

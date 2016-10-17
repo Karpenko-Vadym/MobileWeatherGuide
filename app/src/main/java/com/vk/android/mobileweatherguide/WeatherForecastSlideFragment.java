@@ -1,6 +1,7 @@
 package com.vk.android.mobileweatherguide;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,15 +91,45 @@ public class WeatherForecastSlideFragment extends Fragment
             }
 
             // Set humidity value.
-            ((TextView) rootView.findViewById(R.id.weather_forecast_humidity)).setText(String.format(Locale.CANADA, "POP: %d%%", WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getHumidity()));
+            ((TextView) rootView.findViewById(R.id.weather_forecast_humidity)).setText(String.format(Locale.CANADA, "Humidity: %d%%", WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getHumidity()));
 
             // Set wind value.
-            ((TextView) rootView.findViewById(R.id.weather_forecast_wind)).setText(String.format(Locale.CANADA, "Wind: %s %.2f m/s", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getDeg()), WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getSpeed()));
+            String windPreference = PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString(this.getString(R.string.preferences_wind_speed_units), null);
 
+            if(windPreference != null)
+            {
+                if (windPreference.equals(this.getResources().getStringArray(R.array.preferences_wind_speed_units_values)[0]))
+                {
+                    ((TextView) rootView.findViewById(R.id.weather_forecast_wind)).setText(String.format(Locale.CANADA, "Wind: %s %.2f km/h", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getDeg()), WeatherInfo.getInstance().getKilometersPerHour(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getSpeed())));
+                }
+                else if (windPreference.equals(this.getResources().getStringArray(R.array.preferences_wind_speed_units_values)[1]))
+                {
+                    ((TextView) rootView.findViewById(R.id.weather_forecast_wind)).setText(String.format(Locale.CANADA, "Wind: %s %.2f m/s", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getDeg()), WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getSpeed()));
+                }
+            }
+            else
+            {
+                ((TextView) rootView.findViewById(R.id.weather_forecast_wind)).setText(String.format(Locale.CANADA, "Wind: %s %.2f m/s", WeatherInfo.getInstance().getWindDirection(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getDeg()), WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getSpeed()));
+            }
 
             // Set pressure value.
-            ((TextView) rootView.findViewById(R.id.weather_forecast_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f kPa", WeatherInfo.getInstance().getPressureKPA(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getPressure())));
+            String pressurePreference = PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString(this.getString(R.string.preferences_pressure_units), null);
 
+            if(pressurePreference != null)
+            {
+                if (pressurePreference.equals(this.getResources().getStringArray(R.array.preferences_pressure_units_values)[0]))
+                {
+                    ((TextView) rootView.findViewById(R.id.weather_forecast_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f mbar", WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getPressure()));
+                }
+                else if (pressurePreference.equals(this.getResources().getStringArray(R.array.preferences_pressure_units_values)[1]))
+                {
+                    ((TextView) rootView.findViewById(R.id.weather_forecast_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f kPa", WeatherInfo.getInstance().getPressureKPA(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getPressure())));
+                }
+            }
+            else
+            {
+                ((TextView) rootView.findViewById(R.id.weather_forecast_pressure)).setText(String.format(Locale.CANADA, "Pressure: %.1f kPa", WeatherInfo.getInstance().getPressureKPA(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getPressure())));
+            }
 
             // Set cloudiness value.
             if(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getClouds() != null)
@@ -121,13 +152,41 @@ public class WeatherForecastSlideFragment extends Fragment
             // Set morning temperature value.
             if(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp() != null)
             {
-                ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_morning)).setText(String.format(Locale.CANADA, "Morning: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getMorn())), (char) 0x00B0));
+                String temperaturePreference = PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString(this.getString(R.string.preferences_temperature_units), null);
 
-                ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_day)).setText(String.format(Locale.CANADA, "Day: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getDay())), (char) 0x00B0));
+                if(temperaturePreference != null)
+                {
+                    if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[0]))
+                    {
+                        ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_morning)).setText(String.format(Locale.CANADA, "Morning: %d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getMorn())), (char) 0x00B0));
 
-                ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_evening)).setText(String.format(Locale.CANADA, "Evening: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getEve())), (char) 0x00B0));
+                        ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_day)).setText(String.format(Locale.CANADA, "Day: %d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getDay())), (char) 0x00B0));
 
-                ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_night)).setText(String.format(Locale.CANADA, "Night: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getNight())), (char) 0x00B0));
+                        ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_evening)).setText(String.format(Locale.CANADA, "Evening: %d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getEve())), (char) 0x00B0));
+
+                        ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_night)).setText(String.format(Locale.CANADA, "Night: %d%sF", Math.round(WeatherInfo.getInstance().getFahrenheit(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getNight())), (char) 0x00B0));
+                    }
+                    else if (temperaturePreference.equals(this.getResources().getStringArray(R.array.preferences_temperature_units_values)[1]))
+                    {
+                        ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_morning)).setText(String.format(Locale.CANADA, "Morning: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getMorn())), (char) 0x00B0));
+
+                        ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_day)).setText(String.format(Locale.CANADA, "Day: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getDay())), (char) 0x00B0));
+
+                        ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_evening)).setText(String.format(Locale.CANADA, "Evening: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getEve())), (char) 0x00B0));
+
+                        ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_night)).setText(String.format(Locale.CANADA, "Night: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getNight())), (char) 0x00B0));
+                    }
+                }
+                else
+                {
+                    ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_morning)).setText(String.format(Locale.CANADA, "Morning: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getMorn())), (char) 0x00B0));
+
+                    ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_day)).setText(String.format(Locale.CANADA, "Day: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getDay())), (char) 0x00B0));
+
+                    ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_evening)).setText(String.format(Locale.CANADA, "Evening: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getEve())), (char) 0x00B0));
+
+                    ((TextView) rootView.findViewById(R.id.weather_forecast_temperature_night)).setText(String.format(Locale.CANADA, "Night: %d%sC", Math.round(WeatherInfo.getInstance().getCelsius(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getTemp().getNight())), (char) 0x00B0));
+                }
             }
 
             return rootView;

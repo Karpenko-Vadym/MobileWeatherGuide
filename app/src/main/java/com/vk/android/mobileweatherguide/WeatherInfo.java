@@ -1504,7 +1504,12 @@ public class WeatherInfo
         return directions[(int)((degree / 45) % 8)];
     }
 
-    public double getPressureKPA(double pressure)
+    protected double getKilometersPerHour(double metersPerSecond)
+    {
+        return metersPerSecond * 3.6;
+    }
+
+    protected double getPressureKPA(double pressure)
     {
         return pressure * 0.1;
     }
