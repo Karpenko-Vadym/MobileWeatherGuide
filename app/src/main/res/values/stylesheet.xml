@@ -78,8 +78,16 @@
         <item name="android:background">@drawable/dark_grey_button</item>
     </style>
 
+    <style name="Button.LightGrey">
+        <item name="android:background">@drawable/light_grey_button</item>
+    </style>
+
     <style name="Button.Teal">
         <item name="android:background">@drawable/teal_button</item>
+    </style>
+
+    <style name="Button.LightTeal">
+        <item name="android:background">@drawable/light_teal_button</item>
     </style>
 
     <style name="Button.HorizontalCenter">

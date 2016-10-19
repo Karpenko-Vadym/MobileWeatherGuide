@@ -9,14 +9,14 @@
         style="@style/TextView.Headline.HorizontalCenter"
         android:id="@+id/initial_headline"
         android:layout_marginTop="@dimen/space_between_content_areas"
-        android:text="Welcome to Mobile Weather Guide!" />
+        android:text="@string/initial_location_heading" />
 
     <TextView
         style="@style/TextView.Subheading.HorizontalCenter"
         android:id="@+id/initial_subheading"
         android:layout_below="@id/initial_headline"
         android:layout_marginTop="@dimen/space_between_content_areas"
-        android:text="Before we begin, please select your location." />
+        android:text="@string/initial_location_subheading" />
 
     <AutoCompleteTextView
         android:id="@+id/citiesAutoCompleteField"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorDirtyWhite"
-        android:hint="Please start typing here"
+        android:hint="@string/location_autocomplete_hint"
         android:textColorHint="@color/colorLightTeal" />
 
     <TextView
@@ -34,11 +34,29 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="@dimen/space_between_content_areas"
         android:layout_below="@id/citiesAutoCompleteField"
-        android:text="Please start typing and then select your city from autocomplete field." />
+        android:text="@string/location_help_text" />
+
+    <Button
+        style="@style/Button.LightTeal"
+        android:id="@+id/location_select_current_location_button"
+        android:layout_width="match_parent"
+        android:layout_below="@id/initial_subheading_under"
+        android:layout_marginTop="@dimen/large_gap_between_content_areas"
+        android:onClick="setCurrentLocation"
+        android:textColor="@color/colorMediumGrey"
+        android:text="@string/location_use_device_location_button" />
+
+    <TextView
+        style="@style/TextView.Subheading.HorizontalCenter"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/space_between_content_areas"
+        android:layout_below="@id/location_select_current_location_button"
+        android:text="@string/location_use_device_location_help_text" />
+
     <TextView
         style="@style/TextView.Subheading.HorizontalCenter"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/space_between_content_areas"
-        android:text="NOTE: Location can be changed at any time by navigating to \'Location\' screen and updating your location." />
+        android:text="@string/initial_location_change_hint" />
 
 </RelativeLayout>

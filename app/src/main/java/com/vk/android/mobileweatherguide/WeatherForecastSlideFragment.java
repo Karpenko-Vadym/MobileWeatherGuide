@@ -91,7 +91,14 @@ public class WeatherForecastSlideFragment extends Fragment
             }
 
             // Set humidity value.
-            ((TextView) rootView.findViewById(R.id.weather_forecast_humidity)).setText(String.format(Locale.CANADA, "Humidity: %d%%", WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getHumidity()));
+            if(WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getHumidity() != 0)
+            {
+                ((TextView) rootView.findViewById(R.id.weather_forecast_humidity)).setText(String.format(Locale.CANADA, "Humidity: %d%%", WeatherInfo.getInstance().getWeatherForecast().getList()[this.getPageIndex()].getHumidity()));
+            }
+            else
+            {
+                ((TextView) rootView.findViewById(R.id.weather_forecast_humidity)).setText(String.format(Locale.CANADA, "Humidity: %s", this.getString(R.string.not_applicable)));
+            }
 
             // Set wind value.
             String windPreference = PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString(this.getString(R.string.preferences_wind_speed_units), null);

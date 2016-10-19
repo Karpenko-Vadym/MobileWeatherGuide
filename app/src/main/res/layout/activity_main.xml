@@ -175,6 +175,7 @@
             android:orientation="horizontal"
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
+            android:baselineAligned="false"
             android:layout_below="@id/hourly_forecast_title"
             android:layout_marginTop="@dimen/space_between_content_areas">
 

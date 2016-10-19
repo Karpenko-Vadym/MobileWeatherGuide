@@ -11,11 +11,6 @@
         style="@style/RelativeLayout"
         tools:context="com.vk.android.mobileweatherguide.UserPreferenceActivity">
 
-
-
-
-
-
     </RelativeLayout>
 
     <!-- ListView that displays items in the drawer -->

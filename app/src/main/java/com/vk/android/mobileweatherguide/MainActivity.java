@@ -73,8 +73,15 @@ public class MainActivity extends AppCompatActivity
             this.setApplicationSharedPreferenceManager(new ApplicationSharedPreferenceManager(this));
         }
 
-        if(WeatherInfo.getInstance().getCurrentWeather() == null || WeatherInfo.getInstance().getCurrentWeather().getUvIndex() == null || WeatherInfo.getInstance().getHourlyForecast() == null || WeatherInfo.getInstance().getHourlyForecast().getList() == null || WeatherInfo.getInstance().getHourlyForecast().getList().length < Integer.parseInt(this.getString(R.string.hourly_weather_count_url)))
+        if(WeatherInfo.getInstance().getCurrentWeather() == null || WeatherInfo.getInstance().getCurrentWeather().getId() == null
+                || !this.getApplicationSharedPreferenceManager().getLocationId().equals(WeatherInfo.getInstance().getCurrentWeather().getId()))
         {
+            // Set UVIndex to null to ensure that wrong data will not be displayed.
+            if(WeatherInfo.getInstance().getCurrentWeather() != null && WeatherInfo.getInstance().getCurrentWeather().getId() != null && !this.getApplicationSharedPreferenceManager().getLocationId().equals(WeatherInfo.getInstance().getCurrentWeather().getId()))
+            {
+                WeatherInfo.getInstance().getCurrentWeather().setUvIndex(null);
+            }
+
             // If any of required information is missing, send a request to fetch required information.
             String url = this.getString(R.string.current_weather_url) + this.getApplicationSharedPreferenceManager().getLocationId() + "&" + this.getString(R.string.url_api_key);
 
@@ -82,14 +89,32 @@ public class MainActivity extends AppCompatActivity
 
             RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonCurrentWeatherRequest);
         }
-        else if(WeatherInfo.getInstance().getCurrentWeather() != null && !this.getApplicationSharedPreferenceManager().getLocationId().equals(WeatherInfo.getInstance().getCurrentWeather().getId()))
+        else if(WeatherInfo.getInstance().getHourlyForecast() == null || WeatherInfo.getInstance().getHourlyForecast().getList() == null
+                || WeatherInfo.getInstance().getHourlyForecast().getList().length < Integer.parseInt(this.getString(R.string.hourly_weather_count_url))
+                || WeatherInfo.getInstance().getHourlyForecast().getCity() == null || WeatherInfo.getInstance().getHourlyForecast().getCity().getId() == null
+                || !this.getApplicationSharedPreferenceManager().getLocationId().equals(WeatherInfo.getInstance().getHourlyForecast().getCity().getId()))
         {
-            // If location id stored in current object object does not match the location id stored in shared preferences, fetch required information for correct location id.
-            String url = this.getString(R.string.current_weather_url) + this.getApplicationSharedPreferenceManager().getLocationId() + "&" + this.getString(R.string.url_api_key);
+            // Set UVIndex to null to ensure that wrong data will not be displayed.
+            if(WeatherInfo.getInstance().getHourlyForecast() != null && WeatherInfo.getInstance().getHourlyForecast().getCity() == null && WeatherInfo.getInstance().getHourlyForecast().getCity().getId() == null && !this.getApplicationSharedPreferenceManager().getLocationId().equals(WeatherInfo.getInstance().getHourlyForecast().getCity().getId()))
+            {
+                WeatherInfo.getInstance().getCurrentWeather().setUvIndex(null);
+            }
 
-            JsonObjectRequest jsonCurrentWeatherRequest = new JsonObjectRequest(Request.Method.GET, url, null, this.getResponseListener(), this.getErrorListener());
+            // Send a request to fetch hourly data.
+            String url = MainActivity.this.getString(R.string.hourly_weather_url) + MainActivity.this.getApplicationSharedPreferenceManager().getLocationId() + "&cnt=" + MainActivity.this.getString(R.string.hourly_weather_count_url) + "&" + MainActivity.this.getString(R.string.url_api_key);
 
-            RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonCurrentWeatherRequest);
+            JsonObjectRequest jsonCurrentHourlyWeatherRequest = new JsonObjectRequest(Request.Method.GET, url, null, MainActivity.this.getResponseListener(), MainActivity.this.getErrorListener());
+
+            RequestQueueSingleton.getInstance(MainActivity.this.getApplicationContext()).addToRequestQueue(jsonCurrentHourlyWeatherRequest);
+        }
+        else if(WeatherInfo.getInstance().getCurrentWeather().getUvIndex() == null)
+        {
+            // Send a request to fetch UV Index data.
+            String url = MainActivity.this.getString(R.string.current_uvindex_url) + Math.round(WeatherInfo.getInstance().getCurrentWeather().getCoord().getLat()) + "," + Math.round(WeatherInfo.getInstance().getCurrentWeather().getCoord().getLon()) + "/current.json?" + MainActivity.this.getString(R.string.url_api_key);
+
+            JsonObjectRequest jsonCurrentUVIndexRequest = new JsonObjectRequest(Request.Method.GET, url, null, MainActivity.this.getResponseListener(), MainActivity.this.getErrorListener());
+
+            RequestQueueSingleton.getInstance(MainActivity.this.getApplicationContext()).addToRequestQueue(jsonCurrentUVIndexRequest);
         }
         else
         {
@@ -125,8 +150,7 @@ public class MainActivity extends AppCompatActivity
         if(!this.isExitConfirmed())
         {
             // Setup AlertDialog and show it.
-            new AlertDialog.Builder(MainActivity.this).setMessage("Are you sure you want to exit the application?")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener()
+            new AlertDialog.Builder(MainActivity.this).setMessage("Are you sure you want to exit the application?").setPositiveButton("OK", new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface dialog, int id)
                         {
@@ -277,7 +301,6 @@ public class MainActivity extends AppCompatActivity
                 {
                     weather.setCurrentWeather(gson.fromJson(jsonObject.toString(), WeatherInfo.CurrentWeather.class)); // Deserialize JSON representation into Weather.CurrentWeather class.
 
-
                     if (result.get("rain") != null) // Check if "rain" key exists.
                     {
                         if (result.getAsJsonObject("rain").get("3h") != null) {
@@ -302,19 +325,6 @@ public class MainActivity extends AppCompatActivity
 
                     weather.getCurrentWeather().setTimestamp(new Date()); // Record when current object was last updated.
 
-                    // Send a request to fetch UV Index data.
-                    String url = MainActivity.this.getString(R.string.current_uvindex_url) + Math.round(WeatherInfo.getInstance().getCurrentWeather().getCoord().getLat()) + "," + Math.round(WeatherInfo.getInstance().getCurrentWeather().getCoord().getLon()) + "/current.json?" + MainActivity.this.getString(R.string.url_api_key);
-
-                    JsonObjectRequest jsonCurrentUVIndexRequest = new JsonObjectRequest(Request.Method.GET, url, null, MainActivity.this.getResponseListener(), MainActivity.this.getErrorListener());
-
-                    RequestQueueSingleton.getInstance(MainActivity.this.getApplicationContext()).addToRequestQueue(jsonCurrentUVIndexRequest);
-                }
-                else if(result.get("data") != null)
-                {
-                    weather.getCurrentWeather().setUvIndex(gson.fromJson(jsonObject.toString(), WeatherInfo.CurrentWeather.UVI.class)); // Deserialize JSON representation into Weather.CurrentWeather.UVI class.
-
-                    // TODO: Add forecast api call here. URI: http://api.openweathermap.org/data/2.5/forecast/daily?id=6167865&appid=d9d8bec8ab1806f5096d7734167da78e
-
                     // Send a request to fetch hourly data.
                     String url = MainActivity.this.getString(R.string.hourly_weather_url) + MainActivity.this.getApplicationSharedPreferenceManager().getLocationId() + "&cnt=" + MainActivity.this.getString(R.string.hourly_weather_count_url) + "&" + MainActivity.this.getString(R.string.url_api_key);
 
@@ -325,6 +335,17 @@ public class MainActivity extends AppCompatActivity
                 else if(result.get("list") != null)
                 {
                     weather.setHourlyForecast(gson.fromJson(jsonObject.toString(), WeatherInfo.HourlyForecast.class)); // Deserialize JSON representation into Weather.HourlyWeather class.
+
+                    // Send a request to fetch UV Index data.
+                    String url = MainActivity.this.getString(R.string.current_uvindex_url) + Math.round(WeatherInfo.getInstance().getCurrentWeather().getCoord().getLat()) + "," + Math.round(WeatherInfo.getInstance().getCurrentWeather().getCoord().getLon()) + "/current.json?" + MainActivity.this.getString(R.string.url_api_key);
+
+                    JsonObjectRequest jsonCurrentUVIndexRequest = new JsonObjectRequest(Request.Method.GET, url, null, MainActivity.this.getResponseListener(), MainActivity.this.getErrorListener());
+
+                    RequestQueueSingleton.getInstance(MainActivity.this.getApplicationContext()).addToRequestQueue(jsonCurrentUVIndexRequest);
+                }
+                else if(result.get("data") != null)
+                {
+                    weather.getCurrentWeather().setUvIndex(gson.fromJson(jsonObject.toString(), WeatherInfo.CurrentWeather.UVI.class)); // Deserialize JSON representation into Weather.CurrentWeather.UVI class.
 
                     MainActivity.this.populateContent();
                 }
@@ -345,11 +366,18 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError volleyError) // This event listener listens for error response.
             {
-                // TODO: Decide on displaying the error message in ErrorActivity activity.
+                if(WeatherInfo.getInstance().getCurrentWeather() != null && WeatherInfo.getInstance().getHourlyForecast() != null)
+                {
+                    MainActivity.this.populateContent();
+                }
+                else
+                {
+                    // TODO: Decide on displaying the error message in ErrorActivity activity.
 
-                displayToast(volleyError.getMessage());
+                    displayToast(volleyError.getMessage());
 
-                MainActivity.this.startErrorActivity();
+                    MainActivity.this.startErrorActivity();
+                }
             }
         };
     }
@@ -442,6 +470,10 @@ public class MainActivity extends AppCompatActivity
                 {
                     ((TextView) this.findViewById(R.id.current_weather_uv_index)).setText(R.string.uvindex_level_low);
                 }
+            }
+            else
+            {
+                ((TextView) this.findViewById(R.id.current_weather_uv_index)).setText(R.string.not_applicable);
             }
 
             // Set humidity value.

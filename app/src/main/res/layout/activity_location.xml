@@ -15,9 +15,9 @@ style="@style/DrawerLayout">
         <TextView
             style="@style/TextView.Subheading.HorizontalCenter"
             android:id="@+id/location_current_location"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/space_between_content_areas"
-            android:text="Current Location: N/A" />
+            android:text="" />
 
         <AutoCompleteTextView
             android:id="@+id/citiesAutoCompleteField"
@@ -26,19 +26,32 @@ style="@style/DrawerLayout">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorDirtyWhite"
-            android:hint="Please start typing here"
+            android:hint="@string/location_autocomplete_hint"
             android:textColorHint="@color/colorLightTeal" />
+
+        <TextView
+            style="@style/TextView.Subheading.HorizontalCenter"
+            android:id="@+id/location_help_text"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/space_between_content_areas"
+            android:layout_below="@id/citiesAutoCompleteField"
+            android:text="@string/location_help_text" />
+
+        <Button
+            style="@style/Button.DarkGrey"
+            android:id="@+id/location_select_current_location_button"
+            android:layout_width="match_parent"
+            android:layout_below="@id/location_help_text"
+            android:layout_marginTop="@dimen/large_gap_between_content_areas"
+            android:onClick="setCurrentLocation"
+            android:text="@string/location_use_device_location_button" />
 
         <TextView
             style="@style/TextView.Subheading.HorizontalCenter"
             android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/space_between_content_areas"
-            android:layout_below="@id/citiesAutoCompleteField"
-            android:text="To change your location, please start typing and then select your city from autocomplete field." />
-
-
-
-
+            android:layout_below="@id/location_select_current_location_button"
+            android:text="@string/location_use_device_location_help_text" />
 
     </RelativeLayout>
 

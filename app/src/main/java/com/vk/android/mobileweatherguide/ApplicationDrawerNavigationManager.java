@@ -33,12 +33,14 @@ public class ApplicationDrawerNavigationManager
 
     private void setDrawer()
     {
+        // NOTE: Each item in the drawer MUST be added manually in this method also in drawer_items.xml file.
+
         this.setDrawerLayout((DrawerLayout) this.getCurrentActivity().findViewById(R.id.drawer_layout)); // Get reference of drawer layout.
 
         this.setDrawerListView((ListView) this.getCurrentActivity().findViewById(R.id.drawer_list_view)); // Get reference of drawer list view.
 
         // Get drawer items from drawer_items.xml string arrays.
-        ArrayList<String> drawerItems = new ArrayList<String>(Arrays.asList(this.getCurrentActivity().getResources().getStringArray(R.array.drawer_items)));
+        ArrayList<String> drawerItems = new ArrayList<>(Arrays.asList(this.getCurrentActivity().getResources().getStringArray(R.array.drawer_items)));
 
         // Remove drawer item from ListView for the current activity (In other words, do not display current activity in the menu).
         if (this.getCurrentActivity() instanceof MainActivity)

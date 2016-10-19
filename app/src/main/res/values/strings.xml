@@ -3,11 +3,19 @@
     <string name="preferences_filename">shared_application_preferences</string>
     <string name="location_id">location_id</string>
     <string name="location_display_name">location_display_name</string>
+    <string name="location_help_text">To change your location, please start typing and then select your city from autocomplete field</string>
+    <string name="location_autocomplete_hint">Please start typing here</string>
+    <string name="location_use_device_location_button">Use device location</string>
+    <string name="location_use_device_location_help_text">NOTE: Last known device location will be used upon clicking \"USE DEVICE LOCATION\" button. To ensure accuracy, please update your device location by using google maps or other services that make use of Location or GPS services.</string>
+    <string name="initial_location_change_hint">Location can be changed at any time by navigating to \"Location\" screen and updating your location.</string>
+    <string name="initial_location_subheading">Before we begin, please select your location.</string>
+    <string name="initial_location_heading">Welcome to Mobile Weather Guide!</string>
     <string name="menu_location">Location</string>
     <string name="menu_notifications">Notifications</string>
     <string name="menu_preferences">Preferences</string>
     <string name="url_api_key">appid=d9d8bec8ab1806f5096d7734167da78e</string>
     <string name="current_weather_url">http://api.openweathermap.org/data/2.5/weather?id=</string>
+    <string name="current_weather_url_lat_lon">http://api.openweathermap.org/data/2.5/weather?lat=</string>
     <string name="current_uvindex_url">http://api.openweathermap.org/v3/uvi/</string>
     <string name="hourly_weather_url">http://api.openweathermap.org/data/2.5/forecast?id=</string>
     <string name="hourly_weather_count_url">4</string>
@@ -19,6 +27,7 @@
     <string name="weather_forecast_slide_left">&lt;</string>
     <string name="weather_forecast_navigation_info">Swipe screen or use buttons to navigate between screens</string>
     <string name="data_not_available">DATA IS NOT AVAILABLE</string>
+    <string name="not_applicable">N/A</string>
 
     <!-- Navigation drawer toggle items -->
     <string name="drawer_open">Open drawer</string>
