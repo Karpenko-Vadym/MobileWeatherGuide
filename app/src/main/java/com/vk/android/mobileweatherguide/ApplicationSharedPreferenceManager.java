@@ -1,31 +1,31 @@
 package com.vk.android.mobileweatherguide;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 // ApplicationSharedPreferenceManager class represents a manager that manages operations related to preferences.
 public class ApplicationSharedPreferenceManager
 {
-    private Activity activity;
+    private Context context;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPreferencesEditor;
 
-    public ApplicationSharedPreferenceManager(Activity activity)
+    public ApplicationSharedPreferenceManager(Context context)
     {
-        this.setActivity(activity);
+        this.setContext(context);
         // Set shared preferences to access file identified by the resource string R.string.preferences_filename and opens it using private mode so the file is accessible by only your app.
-        this.setSharedPreferences(this.getActivity().getSharedPreferences(this.getActivity().getString(R.string.preferences_filename), Activity.MODE_PRIVATE));
+        this.setSharedPreferences(this.getContext().getSharedPreferences(this.getContext().getString(R.string.preferences_filename), Context.MODE_PRIVATE));
     }
 
     // Setters and getters for ApplicationSharedPreferenceManager properties.
-    private Activity getActivity()
+    private Context getContext()
     {
-        return this.activity;
+        return this.context;
     }
 
-    private void setActivity(Activity activity)
+    private void setContext(Context context)
     {
-        this.activity = activity;
+        this.context = context;
     }
 
     private SharedPreferences getSharedPreferences()
@@ -50,13 +50,13 @@ public class ApplicationSharedPreferenceManager
 
     public String getLocationId() // Read location id from shared preferences.
     {
-        return this.getActivity() != null && this.getSharedPreferences() != null ? this.getSharedPreferences().getString(this.getActivity().getString(R.string.location_id), null) : null;
+        return this.getContext() != null && this.getSharedPreferences() != null ? this.getSharedPreferences().getString(this.getContext().getString(R.string.location_id), null) : null;
     }
 
     public void setLocationId(String locationId) // Write location id to shared preferences.
     {
         // Ensure that location id can be written to shared preferences.
-        if(this.getActivity() != null && this.getSharedPreferences() != null)
+        if(this.getContext() != null && this.getSharedPreferences() != null)
         {
             if(this.getSharedPreferencesEditor() == null)
             {
@@ -64,14 +64,14 @@ public class ApplicationSharedPreferenceManager
             }
 
             // Write location id to shared preferences.
-            this.getSharedPreferencesEditor().putString(this.getActivity().getString(R.string.location_id), locationId);
+            this.getSharedPreferencesEditor().putString(this.getContext().getString(R.string.location_id), locationId);
             this.getSharedPreferencesEditor().commit();
         }
     }
 
     public String getLocationDisplayName() // Read location display name from shared preferences.
     {
-        return this.getActivity() != null && this.getSharedPreferences() != null ? this.getSharedPreferences().getString(this.getActivity().getString(R.string.location_display_name), null) : null;
+        return this.getContext() != null && this.getSharedPreferences() != null ? this.getSharedPreferences().getString(this.getContext().getString(R.string.location_display_name), null) : null;
     }
 
     public void setLocationDisplayName(String locationDisplayName) // Write location display name to shared preferences.
@@ -85,20 +85,20 @@ public class ApplicationSharedPreferenceManager
             }
 
             // Write location display name to shared preferences.
-            this.getSharedPreferencesEditor().putString(this.getActivity().getString(R.string.location_display_name), locationDisplayName);
+            this.getSharedPreferencesEditor().putString(this.getContext().getString(R.string.location_display_name), locationDisplayName);
             this.getSharedPreferencesEditor().commit();
         }
     }
 
-    // validateContext method validates that current activity and shared preferences are not null. If so, returns true, false otherwise.
+    // validateContext method validates that current context and shared preferences are not null. If so, returns true, false otherwise.
     public boolean validateContext()
     {
-        return this.getActivity() != null && this.getSharedPreferences() != null;
+        return this.getContext() != null && this.getSharedPreferences() != null;
     }
 
     // validatePreferences method validated that preferences (Location id and location display name) are set. If so, returns true, false otherwise.
     public boolean validatePreferences()
     {
-        return this.getSharedPreferences().contains(this.getActivity().getString(R.string.location_id)) && this.getSharedPreferences().contains(this.getActivity().getString(R.string.location_display_name));
+        return this.getSharedPreferences().contains(this.getContext().getString(R.string.location_id)) && this.getSharedPreferences().contains(this.getContext().getString(R.string.location_display_name));
     }
 }

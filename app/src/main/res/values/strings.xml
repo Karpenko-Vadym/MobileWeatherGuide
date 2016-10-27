@@ -28,6 +28,8 @@
     <string name="weather_forecast_navigation_info">Swipe screen or use buttons to navigate between screens</string>
     <string name="data_not_available">DATA IS NOT AVAILABLE</string>
     <string name="not_applicable">N/A</string>
+    <string name="alertTitle">Weather Alert</string>
+    <string name="alertText">Following weather alert(s) are expected in the next 24 hours:</string>
 
     <!-- Navigation drawer toggle items -->
     <string name="drawer_open">Open drawer</string>
@@ -53,8 +55,6 @@
     <string name="icon_wind">Wind Icon</string>
     <string name="hourly_forecast_three_icon">Hourly Forecast Next 3 Hours Icon</string>
 
-
-
     <!-- Preferences strings -->
     <string name="preferences_category_units">Units</string>
     <string name="preferences_temperature_units">preferences_temperature_units</string>
@@ -69,7 +69,6 @@
     <string name="preferences_pressure_units_title">Pressure Units</string>
     <string name="preferences_pressure_units_summary">Set the pressure units</string>
     <string name="preferences_pressure_units_default">2</string>
-
 
     <!-- Preferences arrays -->
     <string-array name="preferences_temperature_units_entries">
@@ -97,6 +96,71 @@
     <string-array name="preferences_pressure_units_values">
         <item name="mbar">1</item>
         <item name="kPa">2</item>
+    </string-array>
+
+    <!--Notifications (Preferences) strings -->
+    <string name="notifications_service_category_system">System</string>
+    <string name="notifications_service_enabled">notifications_service_enabled</string>
+    <string name="notifications_service_frequency">notifications_service_frequency</string>
+    <string name="notifications_service_enabled_title">Enable Notifications</string>
+    <string name="notifications_service_frequency_title">Frequency</string>
+    <string name="notifications_service_enabled_summary">Enable or disable weather notifications</string>
+    <string name="notifications_service_frequency_summary">Weather snapshot frequency</string>
+    <string name="notifications_service_enabled_default">false</string>
+    <string name="notifications_service_frequency_default">1</string>
+    <string name="daily_forecast_analysis_count">2</string>
+    <string name="hourly_forecast_analysis_count">8</string>
+
+    <!-- Notifications (Preferences) arrays -->
+    <string-array name="notifications_service_frequency_entries">
+        <item name="hourly">Every hour</item>
+        <item name="12hours">Every 12 hours</item>
+        <item name="24hours">Every 24 hours</item>
+    </string-array>
+
+    <string-array name="notifications_service_frequency_values">
+        <item name="hourly">1</item>
+        <item name="12hours">12</item>
+        <item name="24hours">24</item>
+    </string-array>
+
+    <!-- Alert code arrays -->
+    <string-array name="alert_codes">
+        <item>212</item> <!-- Heavy thunderstorm -->
+        <item>232</item> <!-- Thunderstorm with heavy drizzle -->
+        <item>302</item> <!-- Heavy intensity drizzle -->
+        <item>312</item> <!-- Heavy intensity drizzle rain -->
+        <item>313</item> <!-- Shower rain and drizzle -->
+        <item>314</item> <!-- Heavy shower rain and drizzle -->
+        <item>321</item> <!-- Shower drizzle -->
+        <item>502</item> <!-- Heavy intensity rain -->
+        <item>503</item> <!-- Very heavy rain -->
+        <item>504</item> <!-- Extreme rain -->
+        <item>511</item> <!-- Freezing rain -->
+        <item>520</item> <!-- Light intensity shower rain -->
+        <item>521</item> <!-- Shower rain -->
+        <item>522</item> <!-- Heavy intensity shower rain -->
+        <item>531</item> <!-- Ragged shower rain -->
+        <item>602</item> <!-- Heavy snow -->
+        <item>612</item> <!-- Shower sleet -->
+        <item>615</item> <!-- Light rain and snow -->
+        <item>616</item> <!-- Rain and snow -->
+        <item>621</item> <!-- Shower snow -->
+        <item>622</item> <!-- Heavy shower snow -->
+        <item>781</item> <!-- Tornado -->
+        <item>900</item> <!-- Tornado -->
+        <item>901</item> <!-- Tropical storm -->
+        <item>902</item> <!-- Hurricane -->
+        <item>903</item> <!-- Cold -->
+        <item>904</item> <!-- Hot -->
+        <item>905</item> <!-- Windy -->
+        <item>906</item> <!-- Hail -->
+        <item>956</item> <!-- Strong breeze -->
+        <item>957</item> <!-- High wind, near gale -->
+        <item>958</item> <!-- Gale -->
+        <item>959</item> <!-- Severe gale -->
+        <item>960</item> <!-- Storm -->
+        <item>961</item> <!-- Violent storm -->
     </string-array>
 
 </resources>

@@ -1,6 +1,8 @@
 package com.vk.android.mobileweatherguide;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +14,6 @@ import android.widget.Toast;
 public class NotificationActivity extends AppCompatActivity
 {
     private ApplicationDrawerNavigationManager applicationDrawerNavigationManager;
-    private ApplicationSharedPreferenceManager applicationSharedPreferenceManager;
     private boolean isExitConfirmed;
 
     @Override
@@ -27,23 +28,18 @@ public class NotificationActivity extends AppCompatActivity
 
         this.setContentView(R.layout.activity_notification);
 
+        // Add UserPreferenceFragment fragment to activity_user_preference container in activity_user_preference layout.
+        FragmentManager fragmentManager = this.getFragmentManager();
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.add(R.id.activity_notification, NotificationFragment.getInstance()).commit();
+
         this.setTitle(this.getResources().getString(R.string.menu_notifications));
 
         this.setApplicationDrawerNavigationManager(new ApplicationDrawerNavigationManager(this, this.getSupportActionBar()));
 
-        this.setApplicationSharedPreferenceManager(new ApplicationSharedPreferenceManager(this)); // Instantiate applicationSharedPreferenceManager property.
-
         /**** END OF SETUP ****/
-
-        if(!this.getApplicationSharedPreferenceManager().validatePreferences()) // Check if preferences were previously set.
-        {
-            // If preferences (Location id and location display name) were previously set, start initial activity.
-            Intent explicitIntent = new Intent(this, InitialActivity.class);
-
-            this.startActivity(explicitIntent);
-
-            this.finish(); // Shut down current activity.
-        }
     }
 
     @Override
@@ -54,11 +50,6 @@ public class NotificationActivity extends AppCompatActivity
         if(this.getApplicationDrawerNavigationManager() == null) // If applicationDrawerNavigationManager property is not set, set it.
         {
             this.setApplicationDrawerNavigationManager(new ApplicationDrawerNavigationManager(this, this.getSupportActionBar()));
-        }
-
-        if(this.getApplicationSharedPreferenceManager() == null) // If applicationSharedPreferenceManager property is not set, set it.
-        {
-            this.setApplicationSharedPreferenceManager(new ApplicationSharedPreferenceManager(this));
         }
     }
 
@@ -101,16 +92,6 @@ public class NotificationActivity extends AppCompatActivity
             // Apply exit animation.
             this.overridePendingTransition(R.anim.activity_exit_animation_in, R.anim.activity_exit_animation_out);
         }
-    }
-
-    private ApplicationSharedPreferenceManager getApplicationSharedPreferenceManager()
-    {
-        return this.applicationSharedPreferenceManager;
-    }
-
-    private void setApplicationSharedPreferenceManager(ApplicationSharedPreferenceManager applicationSharedPreferenceManager)
-    {
-        this.applicationSharedPreferenceManager = applicationSharedPreferenceManager;
     }
 
     public boolean isExitConfirmed()

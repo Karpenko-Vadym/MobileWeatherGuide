@@ -9,9 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_user_preferences"
         style="@style/RelativeLayout"
-        tools:context="com.vk.android.mobileweatherguide.UserPreferenceActivity">
-
-    </RelativeLayout>
+        tools:context="com.vk.android.mobileweatherguide.UserPreferenceActivity" />
 
     <!-- ListView that displays items in the drawer -->
     <ListView android:id="@+id/drawer_list_view"

@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-
 public class UserPreferenceActivity extends AppCompatActivity {
 
     private ApplicationDrawerNavigationManager applicationDrawerNavigationManager;
