@@ -7,22 +7,23 @@
 
     <TextView
         style="@style/TextView.Headline.HorizontalCenter"
-        android:id="@+id/initial_headline"
+        android:id="@+id/error_title"
         android:layout_marginTop="@dimen/space_between_content_areas"
         android:layout_centerVertical="true"
-        android:text="Oh no! This is really awkward!" />
+        android:text="@string/error_title" />
 
     <TextView
         style="@style/TextView.Subheading.HorizontalCenter"
-        android:id="@+id/initial_subheading"
-        android:layout_below="@id/initial_headline"
+        android:id="@+id/error_subtitle"
+        android:layout_below="@id/error_title"
         android:layout_marginTop="@dimen/space_between_content_areas"
-        android:text="We detected an issue while processing your request." />
+        android:text="@string/error_subtitle" />
 
     <TextView
         style="@style/TextView.Subheading.HorizontalCenter"
-        android:layout_below="@id/initial_subheading"
-        android:layout_marginTop="@dimen/space_between_content_areas"
-        android:text="Please restart the application and try again." />
+        android:id="@+id/error_details"
+        android:layout_below="@id/error_subtitle"
+        android:layout_marginTop="@dimen/medium_gap_between_content_areas"
+        android:text="" />
 
 </RelativeLayout>

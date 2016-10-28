@@ -296,16 +296,12 @@ public class WeatherForecastActivity extends AppCompatActivity
                     }
                     else
                     {
-                        // TODO: Decide on displaying the error message in ErrorActivity activity.
-
-                        WeatherForecastActivity.this.startErrorActivity();
+                        WeatherForecastActivity.this.startErrorActivity(WeatherForecastActivity.this.getString(R.string.error_weather_forecast_object_or_properties_not_set));
                     }
                 }
                 else
                 {
-                    // TODO: Decide on displaying the error message in ErrorActivity activity.
-
-                    WeatherForecastActivity.this.startErrorActivity();
+                    WeatherForecastActivity.this.startErrorActivity(WeatherForecastActivity.this.getString(R.string.error_empty_response_body));
                 }
             }
         };
@@ -318,11 +314,7 @@ public class WeatherForecastActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError volleyError) // This event listener listens for error response.
             {
-                // TODO: Decide on displaying the error message in ErrorActivity activity.
-
-                displayToast(volleyError.getMessage());
-
-                WeatherForecastActivity.this.startErrorActivity();
+                WeatherForecastActivity.this.startErrorActivity(WeatherForecastActivity.this.getString(R.string.error_response_error));
             }
         };
     }
@@ -406,11 +398,11 @@ public class WeatherForecastActivity extends AppCompatActivity
     }
 
     // startErrorActivity method start ErrorActivity activity.
-    private void startErrorActivity()
+    private void startErrorActivity(String message)
     {
-        // TODO: Decide on displaying the error message in ErrorActivity activity.
-
         Intent explicitIntent = new Intent(this, ErrorActivity.class);
+
+        explicitIntent.putExtra("message", message);
 
         this.startActivity(explicitIntent);
 

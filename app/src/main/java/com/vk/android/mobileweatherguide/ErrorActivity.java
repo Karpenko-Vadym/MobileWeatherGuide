@@ -2,6 +2,7 @@ package com.vk.android.mobileweatherguide;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class ErrorActivity extends AppCompatActivity
 {
@@ -23,7 +24,9 @@ public class ErrorActivity extends AppCompatActivity
         // Set navigation bar (Located at the bottom) color.
         this.getWindow().setNavigationBarColor(this.getResources().getColor(R.color.colorTeal, null));
 
-        // TODO: Decide on displaying the error message in ErrorActivity activity.
+        String message = "Additional Information: " + (getIntent().hasExtra("message") ? getIntent().getStringExtra("message") : this.getString(R.string.error_details_not_available));
+
+        ((TextView) this.findViewById(R.id.error_details)).setText(message);
     }
 
     @Override

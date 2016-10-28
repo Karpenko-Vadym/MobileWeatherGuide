@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class UserPreferenceActivity extends AppCompatActivity {
 
@@ -166,11 +165,5 @@ public class UserPreferenceActivity extends AppCompatActivity {
         this.getMenuInflater().inflate(R.menu.app_menu_preferences, menu);
 
         return true;
-    }
-
-    // displayToast method displays a toast with a message provided as a parameter. Toast is mostly used for testing purposes.
-    private void displayToast(String message)
-    {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

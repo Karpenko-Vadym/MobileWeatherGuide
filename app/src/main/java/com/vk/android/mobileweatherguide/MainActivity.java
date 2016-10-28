@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.Menu;
 import android.content.Intent;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -265,18 +264,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    // displayToast method displays a toast with a message provided as a parameter. Toast is mostly used for testing purposes.
-    private void displayToast(String message)
-    {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
     // startErrorActivity method start ErrorActivity activity.
-    private void startErrorActivity()
+    private void startErrorActivity(String message)
     {
-        // TODO: Decide on displaying the error message in ErrorActivity activity.
-
         Intent explicitIntent = new Intent(this, ErrorActivity.class);
+
+        explicitIntent.putExtra("message", message);
 
         this.startActivity(explicitIntent);
 
@@ -351,9 +344,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else
                 {
-                    // TODO: Decide on displaying the error message in ErrorActivity activity.
-
-                    MainActivity.this.startErrorActivity();
+                    MainActivity.this.startErrorActivity(MainActivity.this.getString(R.string.error_empty_response_body));
                 }
             }
         };
@@ -372,11 +363,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else
                 {
-                    // TODO: Decide on displaying the error message in ErrorActivity activity.
-
-                    displayToast(volleyError.getMessage());
-
-                    MainActivity.this.startErrorActivity();
+                    MainActivity.this.startErrorActivity(MainActivity.this.getString(R.string.error_response_error));
                 }
             }
         };
@@ -694,9 +681,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            // TODO: Decide on displaying the error message in ErrorActivity activity.
-
-            this.startErrorActivity();
+            this.startErrorActivity(this.getString(R.string.error_current_weather_object_not_set));
         }
     }
 

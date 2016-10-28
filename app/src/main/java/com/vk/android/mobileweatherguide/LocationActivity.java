@@ -101,8 +101,7 @@ public class LocationActivity extends AppCompatActivity
                                         // When user clicks on positive button, store selected city in shared preferences and start main activity.
                                         if (LocationActivity.this.getSelectedLocationIndex() == -1)
                                         {
-                                            // TODO: Decide on displaying the error message in ErrorActivity activity.
-                                            LocationActivity.this.startErrorActivity();
+                                            LocationActivity.this.startErrorActivity(LocationActivity.this.getString(R.string.error_selected_location_not_set));
                                         }
 
                                         // Write location id of selected city to shared preferences.
@@ -138,8 +137,7 @@ public class LocationActivity extends AppCompatActivity
             }
             else // If data from cities.xml string arrays is NOT fetched properly, display an error.
             {
-                // TODO: Decide on displaying the error message in ErrorActivity activity.
-                this.startErrorActivity();
+                this.startErrorActivity(this.getString(R.string.error_cities_xml_error));
             }
         } else {
             // If not set start InitialActivity activity.
@@ -204,9 +202,7 @@ public class LocationActivity extends AppCompatActivity
             else
             {
                 // If none of the providers are enabled, inform the user.
-
-                // TODO: Decide on displaying the error message in ErrorActivity activity.
-                this.startErrorActivity();
+                this.startErrorActivity(this.getString(R.string.error_providers_disabled));
             }
 
             // Check whether location was set.
@@ -218,9 +214,7 @@ public class LocationActivity extends AppCompatActivity
             else
             {
                 // Otherwise, inform the user that no previously set location was detected.
-
-                // TODO: Decide on displaying the error message in ErrorActivity activity.
-                this.startErrorActivity();
+                this.startErrorActivity(this.getString(R.string.error_last_known_location_error));
             }
         }
         else
@@ -262,9 +256,7 @@ public class LocationActivity extends AppCompatActivity
                         else
                         {
                             // If none of the providers are enabled, inform the user.
-
-                            // TODO: Decide on displaying the error message in ErrorActivity activity.
-                            this.startErrorActivity();
+                            this.startErrorActivity(this.getString(R.string.error_providers_disabled));
                         }
 
                         // Check whether location was set.
@@ -276,9 +268,7 @@ public class LocationActivity extends AppCompatActivity
                         else
                         {
                             // Otherwise, inform the user that no previously set location was detected.
-
-                            // TODO: Decide on displaying the error message in ErrorActivity activity.
-                            this.startErrorActivity();
+                            this.startErrorActivity(this.getString(R.string.error_last_known_location_error));
                         }
                     }
                 }
@@ -349,17 +339,13 @@ public class LocationActivity extends AppCompatActivity
                             else
                             {
                                 // If some of the required properties were not set properly, inform the user.
-
-                                // TODO: Decide on displaying the error message in ErrorActivity activity.
-                                LocationActivity.this.startErrorActivity();
+                                LocationActivity.this.startErrorActivity(LocationActivity.this.getString(R.string.error_current_weather_object_properties_not_set));
                             }
                         }
                         else
                         {
                             // If no weather object was delivered with the response, inform the user.
-
-                            // TODO: Decide on displaying the error message in ErrorActivity activity.
-                            LocationActivity.this.startErrorActivity();
+                            LocationActivity.this.startErrorActivity(LocationActivity.this.getString(R.string.error_empty_response_body));
                         }
                     }
                 },
@@ -368,8 +354,7 @@ public class LocationActivity extends AppCompatActivity
                     @Override
                     public void onErrorResponse(VolleyError error)
                     {
-                        // TODO: Decide on displaying the error message in ErrorActivity activity.
-                        LocationActivity.this.startErrorActivity();
+                        LocationActivity.this.startErrorActivity(LocationActivity.this.getString(R.string.error_response_error));
 
                     }
                 });
@@ -522,11 +507,11 @@ public class LocationActivity extends AppCompatActivity
     }
 
     // startErrorActivity method start ErrorActivity activity.
-    private void startErrorActivity()
+    private void startErrorActivity(String message)
     {
-        // TODO: Decide on displaying the error message in ErrorActivity activity.
-
         Intent explicitIntent = new Intent(this, ErrorActivity.class);
+
+        explicitIntent.putExtra("message", message);
 
         this.startActivity(explicitIntent);
 

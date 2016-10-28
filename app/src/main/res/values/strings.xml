@@ -163,4 +163,20 @@
         <item>961</item> <!-- Violent storm -->
     </string-array>
 
+    <!-- Errors -->
+    <string name="error_title">Oh no! This is really awkward!</string>
+    <string name="error_subtitle">We detected an issue while processing your request.</string>
+    <string name="error_notification_title">Issue encountered</string>
+
+    <string name="error_details_not_available">Error details are not available.</string>
+    <string name="error_empty_response_body">Response body did not contain required information.</string>
+    <string name="error_response_error">Response was not successful.</string>
+    <string name="error_current_weather_object_not_set">CurrentWeather object is null.</string>
+    <string name="error_current_weather_object_properties_not_set">CurrentWeather object properties are not set.</string>
+    <string name="error_weather_forecast_object_or_properties_not_set">WeatherForecast object or related properties are not set.</string>
+    <string name="error_selected_location_not_set">Selected location has not been set.</string>
+    <string name="error_cities_xml_error">File cities.xml contains invalid data.</string>
+    <string name="error_providers_disabled">Required providers are not enabled.</string>
+    <string name="error_last_known_location_error">Last known location could not be detected.</string>
+
 </resources>

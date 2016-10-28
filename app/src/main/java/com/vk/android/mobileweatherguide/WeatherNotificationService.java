@@ -310,7 +310,15 @@ public class WeatherNotificationService extends Service
                 }
                 else
                 {
-                    // TODO: Decide on error scenario.
+                    // Issue error notification.
+                    int notificationId = 100003;
+
+                    NotificationCompat.Builder errorBuilder = new NotificationCompat.Builder(getContext()).setSmallIcon(R.mipmap.ic_launcher).setContentTitle(getContext().getString(R.string.error_notification_title))
+                            .setContentText(getContext().getString(R.string.error_empty_response_body));
+
+                    // Issue notification.
+                    ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(notificationId, errorBuilder.build());
+
                     // Shut down the service.
                     stopSelf(startId);
                 }
@@ -325,7 +333,15 @@ public class WeatherNotificationService extends Service
             @Override
             public void onErrorResponse(VolleyError volleyError) // This event listener listens for error response.
             {
-                // TODO: Decide on error scenario.
+                // Issue error notification.
+                int notificationId = 100004;
+
+                NotificationCompat.Builder errorBuilder = new NotificationCompat.Builder(getContext()).setSmallIcon(R.mipmap.ic_launcher).setContentTitle(getContext().getString(R.string.error_notification_title))
+                        .setContentText(getContext().getString(R.string.error_response_error));
+
+                // Issue notification.
+                ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(notificationId, errorBuilder.build());
+
                 // Shut down the service.
                 stopSelf(startId);
             }
