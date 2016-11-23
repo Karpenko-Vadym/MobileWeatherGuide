@@ -8,4 +8,9 @@
         android:title="@string/menu_notifications"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/menu_item_preferences"
+        android:icon="@drawable/preferences_white"
+        android:title="@string/menu_preferences"
+        app:showAsAction="never"/>
+
 </menu>

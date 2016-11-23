@@ -9,14 +9,7 @@ style="@style/DrawerLayout">
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_notification"
         style="@style/RelativeLayout"
-        tools:context="com.vk.android.mobileweatherguide.NotificationActivity">
-
-
-
-
-
-
-    </RelativeLayout>
+        tools:context="com.vk.android.mobileweatherguide.NotificationActivity" />
 
     <!-- ListView that displays items in the drawer -->
     <ListView android:id="@+id/drawer_list_view"

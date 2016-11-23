@@ -6,7 +6,6 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:paddingLeft">@dimen/horizontal_spacing</item>
         <item name="android:paddingRight">@dimen/horizontal_spacing</item>
-        <item name="android:background">@color/colorNightShade</item>
     </style>
 
     <style name="RelativeLayout.Teal">
@@ -79,8 +78,16 @@
         <item name="android:background">@drawable/dark_grey_button</item>
     </style>
 
+    <style name="Button.LightGrey">
+        <item name="android:background">@drawable/light_grey_button</item>
+    </style>
+
     <style name="Button.Teal">
         <item name="android:background">@drawable/teal_button</item>
+    </style>
+
+    <style name="Button.LightTeal">
+        <item name="android:background">@drawable/light_teal_button</item>
     </style>
 
     <style name="Button.HorizontalCenter">

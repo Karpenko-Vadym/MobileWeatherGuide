@@ -33,20 +33,26 @@ public class ApplicationDrawerNavigationManager
 
     private void setDrawer()
     {
+        // NOTE: Each item in the drawer MUST be added manually in this method also in drawer_items.xml file.
+
         this.setDrawerLayout((DrawerLayout) this.getCurrentActivity().findViewById(R.id.drawer_layout)); // Get reference of drawer layout.
 
         this.setDrawerListView((ListView) this.getCurrentActivity().findViewById(R.id.drawer_list_view)); // Get reference of drawer list view.
 
         // Get drawer items from drawer_items.xml string arrays.
-        ArrayList<String> drawerItems = new ArrayList<String>(Arrays.asList(this.getCurrentActivity().getResources().getStringArray(R.array.drawer_items)));
+        ArrayList<String> drawerItems = new ArrayList<>(Arrays.asList(this.getCurrentActivity().getResources().getStringArray(R.array.drawer_items)));
 
         // Remove drawer item from ListView for the current activity (In other words, do not display current activity in the menu).
-        if (this.getCurrentActivity() instanceof MainActivity) {
+        if (this.getCurrentActivity() instanceof MainActivity)
+        {
             drawerItems.remove(this.getCurrentActivity().getResources().getString(R.string.drawer_current_weather));
+        }
+        else if (this.getCurrentActivity() instanceof WeatherForecastActivity)
+        {
+            drawerItems.remove(this.getCurrentActivity().getResources().getString(R.string.drawer_weather_forecast));
         }
 
         // TODO: Include remaining activities ^
-
 
         this.getDrawerListView().setAdapter(new ArrayAdapter<>(this.getCurrentActivity(), R.layout.support_simple_spinner_dropdown_item, drawerItems)); // Set adapter for drawer list view with the list of drawer items.
 
@@ -70,6 +76,25 @@ public class ApplicationDrawerNavigationManager
                             Intent explicitIntent = new Intent(getCurrentActivity(), MainActivity.class);
 
                             getCurrentActivity().startActivity(explicitIntent);
+
+                            getCurrentActivity().finish();
+                        }
+                    }, 235);
+                }
+
+                if(parent.getItemAtPosition(position).toString().equals(getCurrentActivity().getResources().getString(R.string.drawer_weather_forecast)))
+                {
+                    // Allow drawer navigation to close before starting new activity.
+                    new Handler().postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            Intent explicitIntent = new Intent(getCurrentActivity(), WeatherForecastActivity.class);
+
+                            getCurrentActivity().startActivity(explicitIntent);
+
+                            getCurrentActivity().finish();
                         }
                     }, 235);
                 }
@@ -101,15 +126,9 @@ public class ApplicationDrawerNavigationManager
             }
         });
 
-        // TODO: Remove this after testing is complete.
-        //this.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true); // Enable drawer indicator.
-
         this.getDrawerLayout().addDrawerListener(this.getActionBarDrawerToggle()); // Add ActionBarDrawerToggle to the list of listeners.
 
         this.getActionBar().setDisplayHomeAsUpEnabled(true); // Enable left-facing caret on the left side of activity bar and when pressed, activity receives a call to onOptionsItemSelected().
-
-        // TODO: Remove this after testing is complete.
-        //this.getActionBar().setHomeButtonEnabled(true); // Enable home button in the left corner of action bar.
     }
 
 

@@ -1,14 +1,11 @@
 package com.vk.android.mobileweatherguide;
 
-/*
-https://developer.android.com/training/volley/requestqueue.html
- */
-
 import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+// https://developer.android.com/training/volley/requestqueue.html
 public class RequestQueueSingleton // RequestQueueSingleton class encapsulates RequestQueue and other Volley functionality.
 {
     private static RequestQueueSingleton requestQueueSingleton; // TODO: Verify warning about context leak.

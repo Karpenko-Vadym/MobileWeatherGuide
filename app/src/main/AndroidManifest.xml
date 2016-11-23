@@ -3,6 +3,8 @@
     package="com.vk.android.mobileweatherguide">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +22,26 @@
         <activity android:name=".LocationActivity" />
         <activity android:name=".ErrorActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".NotificationActivity" />
+        <activity android:name=".WeatherForecastActivity" />
+        <activity android:name=".UserPreferenceActivity" />
+
+        <receiver android:name=".WeatherServiceBootReceiver" android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".WeatherServiceAlarmReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.vk.android.mobileweatherguide.START_ALARM" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".WeatherNotificationService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
